@@ -1,0 +1,12 @@
+.DS_Store
+.rvm/
+.w3m/
+.m2/
+.npm/
+.emacs.d/backups/
+.emacs.d/elpa/
+.lein/
+.mpd/
+.private
+.bash_history
+
