@@ -9,6 +9,8 @@ s.options.inDevice = "JackRouter";
 s = Server.local.reboot;
 ~pwd=thisProcess.nowExecutingPath.dirname;
 
+
+
 s.waitForBoot({
 
 	~groups = [
@@ -21,7 +23,13 @@ s.waitForBoot({
 		~masterOut = s.outputBus;
 		~freeverbIn = Bus.audio(s,2),
 		~distortIn = Bus.audio(s,2),
+		~vocCarIn = Bus.audio(s,2),
+		~vocModIn = Bus.audio(s,2),
 	];
+
+	p = "/git/manly.wav";
+	~manlyBuf = Buffer.readChannel(s, p, channels:0);
+
 
 	// Load buffers from folder into an array
 	~arrayOfBuffers = (~pwd +/+ "/granSamples/*").pathMatch.collect {
@@ -111,7 +119,7 @@ Pdefn(\granPan, Prand([0.0, -0.25, -0.5, -0.75, -1.0, 0.25, 0.5, 0.75, 1.0], inf
 Pdefn(\sinsawOutBus, 4, inf);
 Pdefn(\sinsawFreq, Pshuf([60, 62, 62, 66].midicps, inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinsawAmp, Pseq([0.025], inf));
+Pdefn(\sinsawAmp, Pseq([0.25], inf));
 Pdefn(\sinsawPan, Pseq([0.0, -0.25, -0.5, -0.75, -1.0, 0.25, 0.5, 0.75, 1.0], inf));
 Pdefn(\sinsawAtt, Pseq([0.01], inf));
 Pdefn(\sinsawMod1, 4, inf);
@@ -119,6 +127,22 @@ Pdefn(\sinsawMod2, 5, inf);
 Pdefn(\sinsawWait, Pshuf([0.25, 0.25, 0.25, 0.5, 0.25], inf));
 
 )
+
+
+~text = Synth.head(~synthGroup,
+	\playBuffer, [
+		\outBus, ~vocCarIn,
+		\buffer, ~manlyBuf
+
+]);
+
+
+~vocoder = Synth.head(~effectGroup,
+	\vocoder, [
+		\outBus, ~masterOut,
+		\voiceInBus, ~vocCarIn,
+		\numBands, 5
+]);
 
 
 ~arrayOfBuffers.do({|i,item| postf("%. % \n", i.bufnum, i.path)});

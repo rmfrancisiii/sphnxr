@@ -29,7 +29,7 @@ SynthDef(\saw, {|
 }).add;
 
 SynthDef(\ixibass, {arg out=0, amp=0.3, t_trig=1, freq=100, rq=0.004;
-// An example, using a nice Bass synth posted by Thor Magnusson in the sc-users list:
+	// An example, using a nice Bass synth posted by Thor Magnusson in the sc-users list:
 	var env, signal;
 	var rho, theta, b1, b2;
 	b1 = 1.98 * 0.989999999 * cos(0.09);
@@ -66,6 +66,30 @@ SynthDef(\gran, {|
 	Out.ar(granOutBus,
 		GrainBuf.ar(2, Impulse.kr(granRate), LFNoise1.kr.range(granDurMin, granDurMax), bufferNum, LFNoise1.kr.range(granPlayRateMin, granPlayRateMax), LFNoise2.kr(granBufPos).range(0, 1), 2, granPan, granEnvBuf) * env)
 }).add;
+
+SynthDef(\playBuffer, {|
+	outBus=(~masterOut),
+	buffer|
+	Out.ar(outBus,
+		PlayBuf.ar(
+			1,
+			buffer,
+			BufRateScale.kr(
+				buffer)
+		)
+	)
+}).add;
+
+SynthDef(\vocoder, {
+
+	Out.ar(~masterOut,
+		Vocoder.ar(
+			Saw.ar(400,4),
+			In.ar(~vocCarIn),
+			56)
+	)
+}).add;
+
 
 
 SynthDef(\freeverb, {|

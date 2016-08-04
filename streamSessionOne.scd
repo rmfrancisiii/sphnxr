@@ -137,4 +137,5 @@ Pdefn(\sinsawAmp, Pseq([0.15], inf));
 ~freeverb.set(\room, 0.95);
 ~freeverb.set(\damp, 0.95);
 
+Pdefn(\sinsaw2OutBus, 4, inf)
 ~granStream.stop;
