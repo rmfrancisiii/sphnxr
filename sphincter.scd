@@ -80,13 +80,19 @@ SynthDef(\playBuffer, {|
 	)
 }).add;
 
-SynthDef(\vocoder, {
+SynthDef(\vocoder, {|
+	outBus=(~masterOut),
+	carIn=(~vocCarIn), //eg. pitch
+	modIn=(~vocModIn), //eg. voice
+	numBands = 50,
+	carAmp = 4
+	|
 
 	Out.ar(~masterOut,
 		Vocoder.ar(
-			Saw.ar(400,4),
-			In.ar(~vocCarIn),
-			56)
+			In.ar(modIn)*carAmp,
+			In.ar(carIn),
+			50)
 	)
 }).add;
 

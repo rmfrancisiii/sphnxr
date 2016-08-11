@@ -19,12 +19,13 @@ s.waitForBoot({
 		~effectGroup = Group.tail(s)
 	];
 
+
 	~busses = [
 		~masterOut = s.outputBus;
 		~freeverbIn = Bus.audio(s,2),
 		~distortIn = Bus.audio(s,2),
-		~vocCarIn = Bus.audio(s,2),
-		~vocModIn = Bus.audio(s,2),
+		~vocCarIn = Bus.audio(s,1),
+		~vocModIn = Bus.audio(s,1)
 	];
 
 	p = "/git/manly.wav";
@@ -116,7 +117,7 @@ Pdefn(\granPan, Prand([0.0, -0.25, -0.5, -0.75, -1.0, 0.25, 0.5, 0.75, 1.0], inf
 )
 
 (
-Pdefn(\sinsawOutBus, 4, inf);
+Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsawFreq, Pshuf([60, 62, 62, 66].midicps, inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinsawAmp, Pseq([0.25], inf));
@@ -129,7 +130,37 @@ Pdefn(\sinsawWait, Pshuf([0.25, 0.25, 0.25, 0.5, 0.25], inf));
 )
 
 
-~text = Synth.head(~synthGroup,
+~car = PStream(
+
+	Pbind(
+		\target, Pdefn(\target, \river, inf),
+		\oscpath, "/synthMsg",
+		\instrument, Pdefn(\instrument, \saw, inf),
+		\sinsawOutBus, Pdefn(\sinsawOutBus, 0, inf),
+		\sinsawFreq, Pdefn(\sinsawFreq, Pseq([60, 62, 62, 66].midicps, inf)),
+		\sinsawDuration, Pdefn(\sinsawDuration, Pseq([0.5, 0.5, 0.25, 0.5, 0.25], inf)),
+		\sinsawAmp, Pdefn(\sinsawAmp, Pseq([0.5], inf)),
+		\sinsawPan, Pdefn(\sinsawPan,
+			Prand([0.0, -0.25, -0.5, -0.75, -1.0, 0.25, 0.5, 0.75, 1.0], inf)),
+		\sinsawAtt, Pdefn(\sinsawAtt, Pseq([0.01], inf)),
+		\sinsawMod1, Pdefn(\sinsawMod1, 0, inf),
+		\sinsawMod2, Pdefn(\sinsawMod2, 0, inf)
+	), Pdefn(\sinsawWait, Pseq([0.5, 0.5, 0.25, 0.5, 0.25], inf)),
+	~addrBook
+
+).play;
+(
+~car = Synth.head(~synthGroup,
+	\saw, [
+		\sinsawOutBus, ~vocModIn,
+		\sinsawFreq, 60.midicps,
+		\sinsawDuration, 60.0,
+		\sinsawAmp, 5.0,
+		\sinsawAtt, 0.01
+
+]);
+)
+~mod = Synth.head(~synthGroup,
 	\playBuffer, [
 		\outBus, ~vocCarIn,
 		\buffer, ~manlyBuf
@@ -137,13 +168,19 @@ Pdefn(\sinsawWait, Pshuf([0.25, 0.25, 0.25, 0.5, 0.25], inf));
 ]);
 
 
-~vocoder = Synth.head(~effectGroup,
+~voc = Synth.head(~effectGroup,
 	\vocoder, [
 		\outBus, ~masterOut,
-		\voiceInBus, ~vocCarIn,
+		\carIn, ~vocCarIn,
+		\modIn, ~vocModIn,
+		\carAmp, 4,
 		\numBands, 5
 ]);
 
+~vocCarIn.postln;
+
+
+~voc.free;
 
 ~arrayOfBuffers.do({|i,item| postf("%. % \n", i.bufnum, i.path)});
 ~distortIn.index.postln;
