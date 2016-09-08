@@ -1,34 +1,105 @@
 // INIT: load deps
-// run this file first
+
+"initializing".postln;
+"loading dependencies...".postln;
+
+~pwd=thisProcess.nowExecutingPath.dirname;
+
+(~pwd +/+ "/config.scd").loadPaths;
+
+"rebooting server".postln;
+
+s.reboot;
+
+"waiting for boot".postln;
+
+s.waitForBoot({
+	"booted".postln;
+
+	(~pwd +/+ "/join_utopia.scd").loadPaths;
+
+	"initializing groups...".postln;
+	// groups
+
+	~groups = Dictionary.newFrom(List[
+		\synthGroup,  ~synthGroup = Group.tail(s),
+		\effectGroup,  ~effectGroup = Group.tail(s)
+	]);
+
+	//s.queryAllNodes;
+
+	~groups.keys.postln;
+
+	"initialized.".postln;
 
 
 
-// config
+	// buffers
+	"loading buffers".postln;
+
+	~arrayOfBuffers = (~pwd +/+ "/granSamples/*").pathMatch.collect {
+		|file|
+		Buffer.readChannel(s, file, channels:0);
+
+	};
+
+	"loaded.".postln;
+
+	// busses
+	~busses = Dictionary.newFrom(List[
+		\masterOut,  ~masterOut = s.outputBus
+	]);
+
+	(~pwd +/+ "/oscDefs.scd").loadPaths;
+
+	(~pwd +/+ "synthdefs/sphincter.scd").loadPaths;
+	(~pwd +/+ "synthdefs/sinsaw.scd").loadPaths;
+
+
+});
+
+	// config
 	//file paths
 	//server options
 
-// join_utopia
+	// join_utopia
 
-// OSC_defs
+	// OSC_defs
 
-// synthdefs
+	// synthdefs
 	//granular
 	//fm
 	//sinsynth
 	//polysynth
 	//vocoder
 
-// environment
-	// groups
-	// buffers
-	// busses
+	// environment
+
+
+
+
+
+
+
 	// instantiate synths
+
+	~synths = [
+	];
+
+
 	// instantiate effects
+	~effects = [
+		~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
+		~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
+	];
+
+
 	// pdefn's
 
-// open session/performance file
 
-// test network and audio setup/sync
-
+	// test network and audio setup/sync
 
 
+
+	"inititialization complete".postln;
+	

@@ -1,4 +1,6 @@
-	//set up display of network peers
+"loading join_utopia.scd...".post;
+
+//set up display of network peers
 	~win = Window("AdHocSociety").front;
 	~win.layout = VLayout.new.add(~listView = ListView.new);
 	//~win.alwaysOnTop = true;
@@ -14,9 +16,4 @@
 	~addrBook.addMe("hostname".unixCmdGetStdOut.split($.)[0];); // add this machine
 	~hail = Hail(~addrBook);
 
-	OSCdef.newMatching(\synthMsg,
-		{|msg, time, addr, recvPort |
-			msg = Dictionary.newFrom(msg.drop(1));
-			Synth.head(~synthGroup, msg[\instrument], msg.getPairs);
-			// "message received".postln;
-	}, "/synthMsg"); // path matching
+"loaded".postln;

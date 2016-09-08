@@ -1,33 +1,4 @@
-SynthDef(\sin, {|
-	sinsawOutBus=(~masterOut),
-	sinsawFreq=440,
-	sinsawDuration=0.1,
-	sinsawAmp=0.25,
-	sinsawPan=0,
-	sinsawAtt=0.15,
-	sinsawMod1=0,
-	sinsawMod2=0|
-	var env = Env([0.001, 0.99, 0.001], [sinsawAtt, 1.0-sinsawAtt], [\sin, \sin]);
-	var envGen = EnvGen.kr(env, doneAction: 2, timeScale: sinsawDuration);
-	var sin = SinOsc.ar(sinsawFreq, SinOsc.ar(XLine.kr(sinsawMod1, sinsawMod2, sinsawDuration), 0, 2pi), sinsawAmp);
-	Out.ar(sinsawOutBus, Pan2.ar(sin * envGen, sinsawPan));
-}).add;
-
-SynthDef(\saw, {|
-	sinsawOutBus=(~masterOut),
-	sinsawFreq=440,
-	sinsawDuration=0.1,
-	sinsawAmp=0.25,
-	sinsawPan=0,
-	sinsawAtt=0.15,
-	sinsawMod1=0,
-	sinsawMod2=0|
-	var env = Env([0.001, 0.75, 0.001], [sinsawAtt, 1.0-sinsawAtt], [\sin, \sin]);
-	var envGen = EnvGen.kr(env, doneAction: 2, timeScale: sinsawDuration);
-	var saw = Saw.ar(sinsawFreq, sinsawAmp);
-	Out.ar(sinsawOutBus, Pan2.ar(saw * envGen, sinsawPan));
-}).add;
-
+"loading synthdef \ixibass...".post;
 SynthDef(\ixibass, {arg out=0, amp=0.3, t_trig=1, freq=100, rq=0.004;
 // An example, using a nice Bass synth posted by Thor Magnusson in the sc-users list:
 	var env, signal;
@@ -40,7 +11,10 @@ SynthDef(\ixibass, {arg out=0, amp=0.3, t_trig=1, freq=100, rq=0.004;
 	DetectSilence.ar(signal, 0.01, doneAction:2);
 	Out.ar(out, signal*(amp*0.45)!2);
 }).add;
+"loaded.".postln;
 
+
+"loading synthdef \gran...".post;
 SynthDef(\gran, {|
 	granOutBus=(~masterOut),
 	granNumChannels=1,
@@ -66,8 +40,12 @@ SynthDef(\gran, {|
 	Out.ar(granOutBus,
 		GrainBuf.ar(2, Impulse.kr(granRate), LFNoise1.kr.range(granDurMin, granDurMax), bufferNum, LFNoise1.kr.range(granPlayRateMin, granPlayRateMax), LFNoise2.kr(granBufPos).range(0, 1), 2, granPan, granEnvBuf) * env)
 }).add;
+"loaded.".postln;
 
 
+
+"loading synthdef \freeverb...".post;
+~busses.add(\freeverbIn -> ~freeverbIn = Bus.audio(s,2));
 SynthDef(\freeverb, {|
 	outBus=(~masterOut),
 	mix = 0.25,
@@ -83,6 +61,10 @@ SynthDef(\freeverb, {|
 		)
 	);
 }).add;
+"loaded.".postln;
+
+"loading synthdef \dist...".post;
+~busses.add(\distortIn -> ~distortIn = Bus.audio(s,2));
 
 SynthDef(\dist, {|
 	outBus=(~masterOut),
@@ -92,3 +74,4 @@ SynthDef(\dist, {|
 	var sig = (input * preGain).distort;
 	Out.ar(outBus, sig * postGain);
 }).add;
+"loaded.".postln;
