@@ -4,6 +4,7 @@
 "loading dependencies...".postln;
 
 ~pwd=thisProcess.nowExecutingPath.dirname;
+("present directory:" +/+ ~pwd).postln;
 
 (~pwd +/+ "/config.scd").loadPaths;
 
@@ -57,14 +58,6 @@ s.waitForBoot({
 
 
 });
-
-	// config
-	//file paths
-	//server options
-
-	// join_utopia
-
-	// OSC_defs
 
 	// synthdefs
 	//granular
