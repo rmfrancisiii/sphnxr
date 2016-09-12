@@ -1,3 +1,5 @@
+//session file
+
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
