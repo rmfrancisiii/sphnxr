@@ -1,34 +1,69 @@
 //session file
 
 
-// run the initialization file, should connect to the network and instantiate shared synths
+// FIRST:  edit config.scd to set local server stuff. This is for
+//         Audio hardware, RAM allocation, etc.
+
+// SECOND: run the initialization file,
+//         which should connect to the network and
+//         instantiate shared synths
+
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
-(
+// NEXT (after "ready to Collide")
 
-// now set up a Pstream with some basic defaults and a Pdefn for each arg you want to control
-// you could do this multiple times for the same synth, with different values for different voices
-// or different targets, busses, etc.
+(
+// 1. Set up a Pstream with some basic defaults.
+//    Assign a Pdefn for each arg you want to control.
+//    You could do this multiple times for the same synth
+//    assigning different ***(or the same!)*** Pdefns
+//    for different voices with shared or separate control values
 
 ~sinsaw = PStream(
 	Pbind(
 		\target, Pdefn(\sinsawTarget, ~hostname, inf),
 		\oscpath, "/synthMsg",
 		\instrument, Pdefn(\sinsawInstrument, \sin, inf),
-		\outBus, Pdefn(\sinsawOutBus, 0, inf),
+		\outBus, Pdefn(\sinsawOutBus),
 		\freq, Pdefn(\sinsawFreq),
-		\dur, Pdefn(\sinsawDuration, 0.1, inf),
-		\amp, Pdefn(\sinsawAmp, 0, inf),
-		\pan, Pdefn(\sinsawPan, 0, inf),
+		\dur, Pdefn(\sinsawDuration),
+		\amp, Pdefn(\sinsawAmp),
+		\pan, Pdefn(\sinsawPan),
 		\att, Pdefn(\sinsawAtt),
 		\mod1, Pdefn(\sinsawMod1),
 		\mod2, Pdefn(\sinsawMod2)
-	), Pdefn(\sinsawWait, 0.1, inf),
+	), Pdefn(\sinsawWait),
 	~addrBook);
 
-// set pdefn values for a section
-Pdefn(\sinsawTarget, \river,  inf);
+
+~sinsaw2 = PStream(
+	Pbind(
+		\target, Pdefn(\sinsaw2Target, ~hostname, inf),
+		\oscpath, "/synthMsg",
+		\instrument, Pdefn(\sinsaw2Instrument, \saw, inf),
+		\outBus, Pdefn(\sinsawOutBus),
+		\freq, Pdefn(\sinsawFreq),
+		\dur, Pdefn(\sinsawDuration),
+		\amp, Pdefn(\sinsawAmp),
+		\pan, Pdefn(\sinsawPan),
+		\att, Pdefn(\sinsawAtt),
+		\mod1, Pdefn(\sinsawMod1),
+		\mod2, Pdefn(\sinsawMod2)
+	), Pdefn(\sinsawWait),
+	~addrBook);
+
+)
+
+
+
+(
+// set initial pdefn values for a section
+
+// Section I
+
+Pdefn(\sinsawTarget, \river, inf);
+Pdefn(\sinsaw2Target, \river, inf);
 Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
 Pdefn(\sinsawFreq, Pshuf([44, 46, 48, 48, 50, 52].midicps, inf));
@@ -41,13 +76,20 @@ Pdefn(\sinsawMod2, 10, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
 )
 
-// start the pstream
-~sinsaw.play;
 
-
-// change pdefn values while it is running
+// start the pstreams
 (
+~sinsaw.play;
+~sinsaw2.play;
+)
+
+
+// change the p midstream:
+
+(
+Pdefn(\sinsawInstrument, \saw, inf);
 Pdefn(\sinsawTarget, Pseq(['\river', '\rose'], inf));
+Pdefn(\sinsaw2Target, \river,  inf);
 Pdefn(\sinsawFreq, Pshuf([40, 42, 24, 44, 40, 50, 60, 40, 80].midicps, inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
@@ -62,6 +104,7 @@ Pdefn(\sinsawWait, Prand([0.125, 0.125, 0.25, 0.25], inf));
 
 
 // stop the pstream
+(
 ~sinsaw.stop;
-
-
+~sinsaw2.stop;
+)

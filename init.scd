@@ -1,59 +1,70 @@
-// INIT: load deps
+//  get present working directory
+("Finding present working directory:\n" + ~pwd=thisProcess.nowExecutingPath.dirname).postln;
 
-"initializing".postln;
-"loading dependencies...".postln;
-
-~pwd=thisProcess.nowExecutingPath.dirname;
-("present directory:" +/+ ~pwd).postln;
+"Loading Local Configuration file".postln;
 
 (~pwd +/+ "/config.scd").loadPaths;
-
-"rebooting server".postln;
+("Server Configuration Loaded. \nBooting server with new values:" + (~delim = "\n\n-----------\n")).postln;
 
 s.reboot;
 
-"waiting for boot".postln;
-
 s.waitForBoot({
-	"booted".postln;
+	(~delim + "\nServer booted Successfully").postln;
 
+	"Joining Network".postln;
 	(~pwd +/+ "/join_utopia.scd").loadPaths;
+	("Joined Network: Success" + ~delim).postln;
 
-	"initializing groups...".postln;
 	// groups
-
 	~groups = Dictionary.newFrom(List[
 		\synthGroup,  ~synthGroup = Group.tail(s),
 		\effectGroup,  ~effectGroup = Group.tail(s)
 	]);
-
-	//s.queryAllNodes;
-
-	~groups.keys.postln;
-
-	"initialized.".postln;
+	s.sync;
+	("Local Groups initialized: Success").postln;
 
 
+	// Load OSC listeners
+	(~pwd +/+ "/oscDefs.scd").loadPaths;
+	s.sync;
+	("Local OSC Listeners initialized: Success").postln;
 
-	// buffers
-	"loading buffers".postln;
+	// Busses
+	~busses = Dictionary.newFrom(List[
+		\masterOut,  ~masterOut = s.outputBus]);
+	("Local Busses initialized: Success " + ~delim).postln;
 
-	~arrayOfBuffers = (~pwd +/+ "/granSamples/*").pathMatch.collect {
+
+	// Load Buffers
+	~buffers = (~pwd +/+ "/granSamples/*").pathMatch.collect {
 		|file|
+		(file+"loaded").postln;
 		Buffer.readChannel(s, file, channels:0);
-
 	};
 
-	"loaded.".postln;
+	("Local Buffers loaded: Success" + ~delim).postln;
 
-	// busses
-	~busses = Dictionary.newFrom(List[
-		\masterOut,  ~masterOut = s.outputBus
-	]);
+	s.sync;
 
-	(~pwd +/+ "/oscDefs.scd").loadPaths;
-	(~pwd +/+ "synthdefs/sin.scd").loadPaths;
-	(~pwd +/+ "synthdefs/saw.scd").loadPaths;
+	// Synths
+	"Loading Synths".postln;
+	~synths = (~pwd +/+ "/synths/*").pathMatch.collect {
+		|file|
+			file.loadPaths;
+		(file +/+ "  loaded").postln };
+	("Synths initialized: Success " + ~delim).postln;
+
+
+	// Effects
+	"Loading Effects".postln;
+	~effects = (~pwd +/+ "/effects/*").pathMatch.collect {
+		|file|
+			file.loadPaths;
+		(file +/+ " loaded").postln };
+	("Effects initialized: Success " + ~delim).postln;
+
+
+	"Ready to Collide >>".postln;
 
 });
 
@@ -74,15 +85,15 @@ s.waitForBoot({
 
 	// instantiate synths
 
-	~synths = [
-	];
+	//~synths = [
+	//];
 
 
 	// instantiate effects
-	~effects = [
-		~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
-		~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
-	];
+	//~effects = [
+	//	~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
+	//	~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
+	//];
 
 
 	// pdefn's
@@ -92,5 +103,5 @@ s.waitForBoot({
 
 
 
-	"inititialization complete".postln;
+	//"inititialization complete".postln;
 	

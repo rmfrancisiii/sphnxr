@@ -1,4 +1,3 @@
-"loading join_utopia.scd...".postln;
 
 //set up display of network peers
 
@@ -13,8 +12,5 @@
 });
 
 "creating address book".postln;
-
 ~addrBook.addMe(~hostname); // add this machine
 ~hail = Hail(~addrBook);
-
-"loaded".postln;
