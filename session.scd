@@ -42,7 +42,7 @@
 		\target, Pdefn(\sinsaw2Target, ~hostname, inf),
 		\oscpath, "/synthMsg",
 		\instrument, Pdefn(\sinsaw2Instrument, \saw, inf),
-		\outBus, Pdefn(\sinsawOutBus),
+		\outBus, Pdefn(\sinsaw2OutBus),
 		\freq, Pdefn(\sinsawFreq),
 		\dur, Pdefn(\sinsawDuration),
 		\amp, Pdefn(\sinsawAmp),
@@ -55,15 +55,13 @@
 
 )
 
-
-
 (
 // set initial pdefn values for a section
 
 // Section I
 
-Pdefn(\sinsawTarget, \river, inf);
-Pdefn(\sinsaw2Target, \river, inf);
+Pdefn(\sinsawTarget, \rose, inf);
+Pdefn(\sinsaw2Target, \rose, inf);
 Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
 Pdefn(\sinsawFreq, Pshuf([44, 46, 48, 48, 50, 52].midicps, inf));
@@ -88,8 +86,8 @@ Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
 
 (
 Pdefn(\sinsawInstrument, \saw, inf);
-Pdefn(\sinsawTarget, Pseq(['\river', '\rose'], inf));
-Pdefn(\sinsaw2Target, \river,  inf);
+//Pdefn(\sinsawTarget, Pseq(['\river', '\rose'], inf));
+//Pdefn(\sinsaw2Target, \river,  inf);
 Pdefn(\sinsawFreq, Pshuf([40, 42, 24, 44, 40, 50, 60, 40, 80].midicps, inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
@@ -101,6 +99,37 @@ Pdefn(\sinsawFreq, Pseq([40, 42, 44, 44, 48, 50, 52, 52,54,60].midicps, inf));
 Pdefn(\sinsawDuration, Prand([0.5, 0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinsawWait, Prand([0.125, 0.125, 0.25, 0.25], inf));
 )
+
+
+
+// activate an effect:
+(
+~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
+~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
+)
+
+// get the bus number
+~busses.postln;
+
+
+// reroute the synth
+Pdefn(\sinsawOutBus, 4, inf);
+
+
+// reroute the other one
+Pdefn(\sinsaw2OutBus, 6, inf);
+
+//  (~freeverb.index).postln;
+
+//change the effect values
+
+~freeverb.set(\mix, 0.95);
+~freeverb.set(\room, 0.95);
+~freeverb.set(\damp, 0.95);
+
+Pdefn(\sinsawOutBus, 6, inf);
+
+
 
 
 // stop the pstream
