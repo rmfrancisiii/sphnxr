@@ -52,9 +52,8 @@ s.waitForBoot({
 	]);
 
 	(~pwd +/+ "/oscDefs.scd").loadPaths;
-	(~pwd +/+ "synthdefs/sphincter.scd").loadPaths;
-	(~pwd +/+ "synthdefs/sinsaw.scd").loadPaths;
-
+	(~pwd +/+ "synthdefs/sin.scd").loadPaths;
+	(~pwd +/+ "synthdefs/saw.scd").loadPaths;
 
 });
 
