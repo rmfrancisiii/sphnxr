@@ -6,11 +6,11 @@ Server.default = s = Server.local;
 // set server options here
 s.options.maxNodes_(4096);
 s.options.memSize_(32768);
-s.options.device="JackRouter";
-s.options.outDevice = "JackRouter";
-s.options.inDevice = "JackRouter";
+//s.options.device="JackRouter";
+//s.options.outDevice = "JackRouter";
+//s.options.inDevice = "JackRouter";
 
-~win = Window("network").minimize; // network window status, eg: .minimize (to hide) or .front (to show)
+~win = Window("network").front; // minimize; // network window status, eg: .minimize (to hide) or .front (to show)
 
 
 ~hostname = ("hostname".unixCmdGetStdOut.split($.)[0]).asSymbol;

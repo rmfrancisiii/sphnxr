@@ -53,4 +53,4 @@ s.sync;
 		\sinsawMod2, Pdefn(\sinsawMod2)
 	), Pdefn(\sinsawWait, 0.1, inf),
 	~addrBook
-).play;
+);
