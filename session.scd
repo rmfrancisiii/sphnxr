@@ -2,9 +2,9 @@
 
 ("~/git/sphnxr/init.scd").loadPaths;
 
-(
-~sinRhythm = PStream(
 
+(
+~sinsaw = PStream(
 	Pbind(
 		\target, Pdefn(\sinsawTarget, ~hostname, inf),
 		\oscpath, "/synthMsg",
@@ -18,14 +18,9 @@
 		\mod1, Pdefn(\sinsawMod1),
 		\mod2, Pdefn(\sinsawMod2)
 	), Pdefn(\sinsawWait, 0.1, inf),
-	~addrBook
-);
-)
+	~addrBook);
 
-
-
-(
-Pdefn(\sinsawTarget, \rose,  inf);
+Pdefn(\sinsawTarget, \river,  inf);
 Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
 Pdefn(\sinsawFreq, Pshuf([44, 46, 48, 48, 50, 52].midicps, inf));
@@ -38,7 +33,7 @@ Pdefn(\sinsawMod2, 10, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
 )
 
-~sinRhythm.play;
+~sinsaw.play;
 
 (
 Pdefn(\sinsawTarget, Pseq(['\river', '\rose'], inf));
