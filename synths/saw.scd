@@ -1,4 +1,3 @@
-"loading synthdef \saw...".post;
 SynthDef(\saw, {|
 	outBus=(~masterOut),
 	freq=440,
@@ -13,4 +12,3 @@ SynthDef(\saw, {|
 	var saw = Saw.ar(freq, amp);
 	Out.ar(outBus, Pan2.ar(saw * envGen, pan));
 }).add;
-"loaded.".postln;

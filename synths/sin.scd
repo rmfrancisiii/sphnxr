@@ -1,4 +1,3 @@
-"loading synthdef \sin...".post;
 SynthDef(\sin, {|
 	outBus=(~masterOut),
 	freq=440,
@@ -13,6 +12,3 @@ SynthDef(\sin, {|
 	var sin = SinOsc.ar(freq, SinOsc.ar(XLine.kr(mod1, mod2, dur), 0, 2pi), amp);
 	Out.ar(outBus, Pan2.ar(sin * envGen, pan));
 }).add;
-"loaded.".postln;
-
-
