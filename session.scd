@@ -108,12 +108,8 @@ Pdefn(\sinsawWait, Prand([0.125, 0.125, 0.25, 0.25], inf));
 ~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
 )
 
-// get the bus number
-~busses.postln;
-
-
 // reroute the synth
-Pdefn(\sinsawOutBus, 4, inf);
+Pdefn(\sinsawOutBus, 6, inf);
 
 
 // reroute the other one

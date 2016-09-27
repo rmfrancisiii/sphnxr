@@ -79,27 +79,6 @@ s.waitForBoot({
 	// environment
 
 
-
-
-
-
-
-	// instantiate synths
-
-	//~synths = [
-	//];
-
-
-	// instantiate effects
-	//~effects = [
-	//	~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
-	//	~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
-	//];
-
-
-	// pdefn's
-
-
 	// test network and audio setup/sync
 
 

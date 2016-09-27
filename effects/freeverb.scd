@@ -1,11 +1,10 @@
-~busses.add(\freeverbIn -> ~freeverbIn = Bus.audio(s,2));
-
 SynthDef(\freeverb, {|
+	inBus=(~freeverbIn),
 	outBus=(~masterOut),
 	mix = 0.25,
 	room = 0.15,
 	damp = 0.5|
-	var input = In.ar(~freeverbIn, 2);
+	var input = In.ar(inBus, 2);
 	Out.ar(outBus,
 		FreeVerb.ar(
 			input,
