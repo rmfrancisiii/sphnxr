@@ -1,18 +1,17 @@
 //session file
 
 
-// FIRST:  edit config.scd to set local server stuff. This is for
-//         Audio hardware, RAM allocation, etc.
+//// glurggg. this only works locally. on a remote machine the management of busses isn't robust enough... could send details as osc data. need OSCDef for Bus responder.
 
-// SECOND: run the initialization file,
-//         which should connect to the network and
-//         instantiate shared synths
 
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
 
-
+~addrBook.names.postln;
+~addrBook.at(\rose).postln;
+~addrBook.addrs(\rose).postln;
+~addrBook.addrs.postln;
 
 
 // NEXT (after "ready to Collide")
@@ -52,12 +51,11 @@
 
 
 )
-// set initial pdefn values for a section
-
 
 
 // Section I
 (
+Pdefn(\sinsawTarget, '\rose', inf);
 Pdefn(\sinsawInstrument, \saw, inf);
 Pdefn(\sinsawOutBus, ~freeverbIn.index, inf);
 Pdefn(\sinsawOutBus, ~masterOut.index, inf);
@@ -74,7 +72,7 @@ Pdefn(\sinsawOutBus, ~masterOut.index, inf);
 Pdefn(\sinsawOutBus, ~masterOut.index, inf);
 Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60].midicps*1), inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.25, 0.5, 0.25]*0.01, inf));
-Pdefn(\sinsawAmp, 2.5, inf);
+Pdefn(\sinsawAmp, 0.5, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 
 ~freeverb.set(\mix, 0.25);
