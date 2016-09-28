@@ -9,14 +9,18 @@ OSCdef.newMatching(\synthMsg,
 
 OSCdef.newMatching(\testMsg,
 	{|msg, time, addr, recvPort |
-		("TEST message received from"+addr).postln;
-		addr.sendMsg("/testReply", ("connected with "+addr));
+		"TEST message received from /".post;
+		(~addrBook.peers.detect({ arg item, i; (item.addr==addr) })).name.postln;
+
+		addr.sendMsg("/testReply");
 		//return message "connected!"
 }, "/testMsg"); // path matching
 
 OSCdef.newMatching(\testReply,
 	{|msg, time, addr, recvPort |
-		("Successful TEST reply message received from"+addr).postln;
+		"Successful TEST reply message received from /".post;
+		(~addrBook.peers.detect({ arg item, i; (item.addr==addr) })).name.postln;
+		~addrBook.includesAddr(addr).postln;
 }, "/testReply"); // path matching
 
 

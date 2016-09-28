@@ -12,7 +12,15 @@
 ~addrBook.at(\rose).postln;
 ~addrBook.addrs(\rose).postln;
 ~addrBook.addrs.postln;
+~addrBook.peers.postln;
 
+
+~addrBook.at(\river).sendMsg("/testMsg", "test");
+
+~addrBook.send(\rose, "/testMsg", "test");
+
+
+~addrBook.postln;
 
 // NEXT (after "ready to Collide")
 (
