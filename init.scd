@@ -15,6 +15,12 @@ s.waitForBoot({
 	(~pwd +/+ "/join_utopia.scd").loadPaths;
 	("Joined Network: Success" + ~delim).postln;
 
+	// Load OSC listeners
+	(~pwd +/+ "/oscDefs.scd").loadPaths;
+	s.sync;
+	("Local OSC Listeners initialized: Success").postln;
+
+
 	// groups
 	~groups = Dictionary.newFrom(List[
 		\synthGroup,  ~synthGroup = Group.tail(s),
@@ -24,10 +30,6 @@ s.waitForBoot({
 	("Local Groups initialized: Success").postln;
 
 
-	// Load OSC listeners
-	(~pwd +/+ "/oscDefs.scd").loadPaths;
-	s.sync;
-	("Local OSC Listeners initialized: Success").postln;
 
 	// Busses
 	~busses = Dictionary.newFrom(List[
@@ -63,6 +65,15 @@ s.waitForBoot({
 			file.loadPaths;
 		(file +/+ " loaded").postln };
 	("Effects initialized: Success " + ~delim).postln;
+
+
+		// Test Peers
+	"Testing Utopia Peers:".postln;
+	~addrBook.peers.do({arg item, i;
+		("  Test Message sent to"+item.name).postln;
+		~addrBook.send(item.name, "/testMsg")}
+	);
+
 
 
 	"Ready to Collide >>".postln;

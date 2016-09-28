@@ -7,18 +7,14 @@
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
-
-~addrBook.names.postln;
-~addrBook.at(\rose).postln;
-~addrBook.addrs(\rose).postln;
-~addrBook.addrs.postln;
-~addrBook.peers.postln;
+~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
 
 
-~addrBook.at(\river).sendMsg("/testMsg", "test");
+~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/testMsg")});
 
-~addrBook.send(\rose, "/testMsg", "test");
+~testTone = Synth.head(~synthGroup, \saw, [\freq, 70.midicps, \pan, -1, \dur, 5.0, \outBus, ~masterOut]);
 
+~testTone = Synth.head(~synthGroup, \saw, [\freq, 60.midicps, \pan, 1, \dur, 5.0, \outBus, ~masterOut]);
 
 ~addrBook.postln;
 
