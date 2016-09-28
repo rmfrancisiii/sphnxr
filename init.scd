@@ -86,13 +86,3 @@ s.waitForBoot({
 	//sinsynth
 	//polysynth
 	//vocoder
-
-	// environment
-
-
-	// test network and audio setup/sync
-
-
-
-	//"inititialization complete".postln;
-	

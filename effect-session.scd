@@ -7,16 +7,16 @@
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
-~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
-
-
 ~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/testMsg")});
 
-~testTone = Synth.head(~synthGroup, \saw, [\freq, 70.midicps, \pan, -1, \dur, 5.0, \outBus, ~masterOut]);
+~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/busListMsg")});
 
-~testTone = Synth.head(~synthGroup, \saw, [\freq, 60.midicps, \pan, 1, \dur, 5.0, \outBus, ~masterOut]);
 
-~addrBook.postln;
+// tuning up
+
+~addrBook.testAudio;
+~addrBook.testAllMsg;
+~addrBook.testMsg(\rose);
 
 // NEXT (after "ready to Collide")
 (
@@ -97,6 +97,7 @@ Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 SynthDescLib.global.read;
 SynthDescLib.global.browse;
 
+SynthDescLib.global.at(\sin) // shortcut, same as line above
 
 ~busses.postln;
 
