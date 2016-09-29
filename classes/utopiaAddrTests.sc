@@ -4,6 +4,7 @@
     }
 
 	testAllAudio {
+		"Testing peers audio:".postln;
 		this.peers.do({arg item, i; this.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
     }
 
@@ -13,7 +14,7 @@
 	}
 
 	testAllMsg {
-		"Testing peers".postln;
+		"Testing peers messaging:".postln;
 		this.peers.do({arg item, i;
 			this.testMsg(item.name)})
 	}

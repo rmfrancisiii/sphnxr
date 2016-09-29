@@ -1,24 +1,21 @@
 //session file
 
-
-//// glurggg. this only works locally. on a remote machine the management of busses isn't robust enough... could send details as osc data. need OSCDef for Bus responder.
-
-
 ("~/git/sphnxr/init.scd").loadPaths;
 
+//this is working, but should the dictionary maybe be a property of the Utopia Peer?
 
-~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/testMsg")});
+~busses.add(\freeverbIn -> ~freeverbIn = Bus.audio(s,2));
+~busses.add(\distortionIn -> ~freeverbOut = Bus.audio(s,2));
 
-~addrBook.peers.do({arg item, i; ~addrBook.send(item.name, "/busListMsg")});
-
+~addrBook.send(\rose, "/busListMsg");
 
 // tuning up
 
-~addrBook.testAudio(\river);
 ~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
-~addrBook.testMsg(\rose);
-~addrBook.testMsg(\river);
+
+~addrBook.send(\rose, "/busListMsg");
+
 
 // NEXT (after "ready to Collide")
 (
