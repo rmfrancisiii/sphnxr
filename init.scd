@@ -69,10 +69,7 @@ s.waitForBoot({
 
 		// Test Peers
 	"Testing Utopia Peers:".postln;
-	~addrBook.peers.do({arg item, i;
-		("  Test Message sent to"+item.name).postln;
-		~addrBook.send(item.name, "/testMsg")}
-	);
+
 
 
 

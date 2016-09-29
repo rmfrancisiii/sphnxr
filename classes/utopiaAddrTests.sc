@@ -1,6 +1,10 @@
 + AddrBook {
-    testAudio {
-		this.peers.do({arg item, i; ~addrBook.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
+    testAudio {|peer|
+		this.send(peer, "/testAudio", 50, 60 )
+    }
+
+	testAllAudio {
+		this.peers.do({arg item, i; this.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
     }
 
 	testMsg{|peer|

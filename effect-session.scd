@@ -14,9 +14,11 @@
 
 // tuning up
 
-~addrBook.testAudio;
+~addrBook.testAudio(\river);
+~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
 ~addrBook.testMsg(\rose);
+~addrBook.testMsg(\river);
 
 // NEXT (after "ready to Collide")
 (
