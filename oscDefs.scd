@@ -47,5 +47,4 @@ OSCdef.newMatching(\busReply,
 		"Bus list for \\".post;
 		(~addrBook.findname(addr)).postln;
 		msg = Dictionary.newFrom(msg.drop(1));
-//		msg=msg.drop(1);
 		msg.postln}, "/busReply"); // path matching

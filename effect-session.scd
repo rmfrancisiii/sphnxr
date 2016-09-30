@@ -16,6 +16,8 @@
 
 ~addrBook.send(\rose, "/busListMsg");
 
+~addrBook.peers;
+
 
 // NEXT (after "ready to Collide")
 (
