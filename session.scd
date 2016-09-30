@@ -10,11 +10,22 @@
 
 ("~/git/sphnxr/init.scd").loadPaths;
 
+(
+// Next
+// 1.  Create an effects list
+//     ** (this should be added to the init routine)
 
-// NEXT (after "ready to Collide")
+~effectlist = EffectList.new;
+
+// and add a couple of effects.
+// should add a list argument for initial values of effect
+
+~effectlist.addEffect(\reverb, "freeverb" );
+~effectlist.addEffect(\distortion, "dist" );
+)
 
 (
-// 1. Set up a Pstream with some basic defaults.
+// 2. Set up a Pstream with some basic defaults.
 //    Assign a Pdefn for each arg you want to control.
 //    You could do this multiple times for the same synth
 //    assigning different ***(or the same!)*** Pdefns
@@ -24,7 +35,7 @@
 	Pbind(
 		\target, Pdefn(\sinsawTarget, ~hostname, inf),
 		\oscpath, "/synthMsg",
-		\instrument, Pdefn(\sinsawInstrument, \sin, inf),
+		\instrument, Pdefn(\sinsawInstrument),
 		\outBus, Pdefn(\sinsawOutBus),
 		\freq, Pdefn(\sinsawFreq),
 		\dur, Pdefn(\sinsawDuration),
@@ -41,7 +52,7 @@
 	Pbind(
 		\target, Pdefn(\sinsaw2Target, ~hostname, inf),
 		\oscpath, "/synthMsg",
-		\instrument, Pdefn(\sinsaw2Instrument, \saw, inf),
+		\instrument, Pdefn(\sinsaw2Instrument),
 		\outBus, Pdefn(\sinsaw2OutBus),
 		\freq, Pdefn(\sinsawFreq),
 		\dur, Pdefn(\sinsawDuration),
@@ -53,83 +64,70 @@
 	), Pdefn(\sinsawWait),
 	~addrBook);
 
-)
 
-(
-// set initial pdefn values for a section
-
-// Section I
+// 3. now set the individual pdefns
 
 Pdefn(\sinsawTarget, \rose, inf);
 Pdefn(\sinsaw2Target, \rose, inf);
-Pdefn(\sinsawOutBus, 0, inf);
-Pdefn(\sinsawInstrument, \sin, inf);
-Pdefn(\sinsawFreq, Pshuf([44, 46, 48, 48, 50, 52].midicps, inf));
-Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinsawAmp, Pseq([0.25], inf));
-Pdefn(\sinsawPan, Pseq([0.0, -0.25, -0.5, -0.75, -1.0, 0.25, 0.5, 0.75, 1.0], inf));
-Pdefn(\sinsawAtt, Pseq([0.001], inf));
-Pdefn(\sinsawMod1, 5, inf);
-Pdefn(\sinsawMod2, 10, inf);
-Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
+Pdefn(\sinsawInstrument, \saw, inf);
+Pdefn(\sinsaw2Instrument, \saw, inf);
+Pdefn(\sinsawOutBus, ~effectlist.busIndex(\masterOut), inf);
+Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\masterOut), inf);
+Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60].midicps), inf));
+Pdefn(\sinsawDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
+Pdefn(\sinsawAmp, 0.15, inf);
+Pdefn(\sinsawAtt, 0.15, inf);
+Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 )
 
 
-// start the pstreams
+// 4. start the pstreams
 (
 ~sinsaw.play;
 ~sinsaw2.play;
 )
 
 
-// change the p midstream:
-
-(
-Pdefn(\sinsawInstrument, \saw, inf);
-//Pdefn(\sinsawTarget, Pseq(['\river', '\rose'], inf));
-//Pdefn(\sinsaw2Target, \river,  inf);
-Pdefn(\sinsawFreq, Pshuf([40, 42, 24, 44, 40, 50, 60, 40, 80].midicps, inf));
-Pdefn(\sinsawDuration, Pshuf([0.5, 0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinsawWait, Pshuf([0.125, 0.125, 0.25, 0.25, 0.5, 0.25], inf));
-)
+// 5. change the p midstream:
 
 
-(
-Pdefn(\sinsawFreq, Pseq([40, 42, 44, 44, 48, 50, 52, 52,54,60].midicps, inf));
-Pdefn(\sinsawDuration, Prand([0.5, 0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinsawWait, Prand([0.125, 0.125, 0.25, 0.25], inf));
-)
+Pdefn(\sinsawOutBus, ~effectlist.busIndex(\reverb), inf);
+Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\reverb), inf);
 
+~effectlist.set(\reverb, \mix, 0.5);
+~effectlist.set(\reverb, \room, 0.99);
+~effectlist.set(\reverb, \damp, 0.01);
+~effectlist.set(\reverb, \mix, 0.99);
 
+Pdefn(\sinsaw2Instrument, \sin, inf);
 
-// activate an effect:
-(
-~distort = Synth.head(~effectGroup, \dist, [\outBus, ~masterOut]);
-~freeverb = Synth.head(~effectGroup, \freeverb, [\outBus, ~masterOut]);
-)
+Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\distortion), inf);
+~effectlist.set(\distortion, \postGain, 0.12);
+~effectlist.set(\distortion, \preGain, 50.0);
 
-// reroute the synth
-Pdefn(\sinsawOutBus, 6, inf);
-
-
-// reroute the other one
-Pdefn(\sinsaw2OutBus, 6, inf);
-
-//  (~freeverb.index).postln;
-
-//change the effect values
-
-~freeverb.set(\mix, 0.95);
-~freeverb.set(\room, 0.95);
-~freeverb.set(\damp, 0.95);
-
-Pdefn(\sinsawOutBus, 6, inf);
+Pdefn(\sinsawInstrument, \sin, inf);
 
 
 
 
-// stop the pstream
+// 6. stop the pstream
 (
 ~sinsaw.stop;
 ~sinsaw2.stop;
 )
+
+// 7. free the effects synths and remove from the list
+(
+~effectlist.free(\reverb);
+~effectlist.free(\distortion);
+)
+
+// other stuff later:
+
+// ~effectlist.list.postln;
+// SynthDescLib.global.read;
+// SynthDescLib.global.browse;
+// SynthDescLib.global.at(\sin);
+//
+ SynthDescLib.global.at(\freeverb);
+ SynthDescLib.global.at(\dist);
