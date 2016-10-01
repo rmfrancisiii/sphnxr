@@ -10,6 +10,10 @@
 
 ("~/git/sphnxr/init.scd").loadPaths;
 
+// test the new network
+~addrBook.testAllAudio;
+~addrBook.testAllMsg;
+
 (
 // Next
 // 1.  Create an effects list
@@ -23,6 +27,11 @@
 ~effectlist.addEffect(\reverb, "freeverb" );
 ~effectlist.addEffect(\distortion, "dist" );
 )
+
+
+~addrBook.send(\rose, "/busListMsg");
+
+
 
 (
 // 2. Set up a Pstream with some basic defaults.
