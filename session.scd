@@ -8,15 +8,18 @@
 //         which should connect to the network and
 //         instantiate shared synths
 
-("~/git/sphnxr/init.scd") .loadPaths;
+("~/git/sphnxr/init.scd").loadPaths;
 
 // test the new network
 ~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
+~addrBook.peers; // who's out there?
 
 (
 // add a couple of effects.
 // *** should add a list argument for setting initial values of effect
+// *** should be peer.addEffect
+
 
 ~effectList.addEffect(\reverb, "freeverb" );
 ~effectList.addEffect(\distortion, "dist" );
@@ -24,7 +27,9 @@
 
 
 // get a list of available effects and their bus index
-~addrBook.send(\rose, "/busListMsg");
+
+// *** should be peer.listEffects
+~addrBook.send(\river, "/busListMsg");
 
 (
 // 2. Set up a Pstream with some basic defaults.
@@ -66,20 +71,48 @@
 	), Pdefn(\sinsawWait),
 	~addrBook);
 
+~ixibass = PStream(
+	Pbind(
+		\target, Pdefn(\ixiTarget, ~hostname, inf),
+		\oscpath, "/synthMsg",
+		\instrument, Pdefn(\ixiInstrument),
+		\out, Pdefn(\ixiOutBus),
+		\amp, Pdefn(\ixiAmp),
+		\t_trig, Pdefn(\ixiTrig),
+		\freq, Pdefn(\ixiFreq),
+		\rq, Pdefn(\ixiRQ),
+	), Pdefn(\ixiWait),
+	~addrBook);
+)
 
+(
 // 3. now set the individual pdefns
 
-Pdefn(\sinsawTarget, \rose, inf);
-Pdefn(\sinsaw2Target, \rose, inf);
-Pdefn(\sinsawInstrument, \saw, inf);
-Pdefn(\sinsaw2Instrument, \saw, inf);
-Pdefn(\sinsawOutBus, ~effectList.busIndex(\masterOut), inf);
-Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\masterOut), inf);
-Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60].midicps), inf));
+// Pdefn(\sinsawTarget, \rose, inf);
+Pdefn(\sinsawInstrument, \sin, inf);
+Pdefn(\sinsawOutBus, 6, inf);
+
+// Pdefn(\sinsaw2Target, \rose, inf);
+Pdefn(\sinsaw2Instrument, \sin, inf);
+Pdefn(\sinsaw2OutBus, 4, inf);
+
+
+Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinsawAmp, 0.15, inf);
-Pdefn(\sinsawAtt, 0.15, inf);
+Pdefn(\sinsawAmp, 0.25, inf);
+Pdefn(\sinsawAtt, 0.75, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
+
+
+// Pdefn(\ixiTarget, \rose, inf);
+Pdefn(\ixiInstrument, \ixibass, inf);
+Pdefn(\ixiOutBus, 6, inf);
+Pdefn(\ixiFreq, Pshuf(([50,52,54,55,58,60]-5).midicps, inf));
+Pdefn(\ixiAmp, 0.1, inf);
+Pdefn(\ixiRQ, 0.01, inf);
+Pdefn(\ixiTrig, 1, inf);
+Pdefn(\ixiWait, Pseq([ 0.125, 0.25, 0.5, 0.25, 0.25, 0.5, 0.25, 1.0], inf));
+
 )
 
 
@@ -87,27 +120,34 @@ Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 (
 ~sinsaw.play;
 ~sinsaw2.play;
+~ixibass.play;
 )
 
+/// change the target Peer
+//Pdefn(\sinsawTarget, \river, inf);
+//Pdefn(\sinsaw2Target, \river, inf);
+//Pdefn(\ixiTarget, \river, inf);
 
 // 5. change the p midstream:
 
 
-Pdefn(\sinsawOutBus, ~effectList.busIndex(\reverb), inf);
+Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\reverb), inf);
 
-~effectList.set(\reverb, \mix, 0.5);
+// *** should be Peer.setEffect
+~effectList.set(\reverb, \mix, 0.9);
 ~effectList.set(\reverb, \room, 0.99);
 ~effectList.set(\reverb, \damp, 0.01);
 ~effectList.set(\reverb, \mix, 0.99);
 
 Pdefn(\sinsaw2Instrument, \sin, inf);
+Pdefn(\sinsaw2Instrument, \saw, inf);
 
 Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\distortion), inf);
 ~effectList.set(\distortion, \postGain, 0.12);
 ~effectList.set(\distortion, \preGain, 50.0);
 
-Pdefn(\sinsawInstrument, \sin, inf);
+Pdefn(\sinsaw2Instrument, \sin, inf);
 
 
 
@@ -116,20 +156,24 @@ Pdefn(\sinsawInstrument, \sin, inf);
 (
 ~sinsaw.stop;
 ~sinsaw2.stop;
+~ixibass.stop;
 )
 
+
 // 7. free the effects synths and remove from the list
+// *** should be peer.freeEffect
+// *** Is this freeing the bus too? or just the synth?
+
 (
 ~effectList.free(\reverb);
 ~effectList.free(\distortion);
 )
 
-// other stuff later:
+// *** other stuff later:
 
-// ~effectlist.list.postln;
+/// ***get a list of available synths and/or controls
+
 // SynthDescLib.global.read;
 // SynthDescLib.global.browse;
-// SynthDescLib.global.at(\sin);
-//
- SynthDescLib.global.at(\freeverb);
- SynthDescLib.global.at(\dist);
+// SynthDescLib.global.at(\ixibass);
+// SynthDescLib.global.at(\freeverb);
