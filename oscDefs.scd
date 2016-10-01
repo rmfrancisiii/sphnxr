@@ -33,10 +33,9 @@ OSCdef.newMatching(\testAudio,
 OSCdef.newMatching(\busListMsg,
 	{|msg, time, addr, recvPort |
 		var reply=List.new;
-		(~addrBook.findname(addr)).postln;
-		~busses.keysValuesDo({|key, value|
+		~effectList.dict.keysValuesDo({|key, value|
 			reply.add(key);
-			reply.add(value.index)
+			reply.add(value[0].index);
 		});
 		addr.sendMsg("/busReply", *reply);
 }, "/busListMsg"); // path matching
@@ -46,5 +45,5 @@ OSCdef.newMatching(\busReply,
 	{|msg, time, addr, recvPort |
 		"Bus list for \\".post;
 		(~addrBook.findname(addr)).postln;
-		msg = Dictionary.newFrom(msg.drop(1));
-		msg.postln}, "/busReply"); // path matching
+		msg = Dictionary.newFrom(msg.drop(1)).postln
+}, "/busReply"); // path matching

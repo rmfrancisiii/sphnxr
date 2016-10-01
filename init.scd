@@ -30,12 +30,9 @@ s.waitForBoot({
 	("Local Groups initialized: Success").postln;
 
 
-
-	// Busses
-	~busses = Dictionary.newFrom(List[
-		\masterOut,  ~masterOut = s.outputBus]);
-	("Local Busses initialized: Success " + ~delim).postln;
-
+	//effects
+	~effectList = EffectList.new;
+	("Effect Busses initialized: Success " + ~delim).postln;
 
 
 	// Load Buffers

@@ -8,30 +8,23 @@
 //         which should connect to the network and
 //         instantiate shared synths
 
-("~/git/sphnxr/init.scd").loadPaths;
+("~/git/sphnxr/init.scd") .loadPaths;
 
 // test the new network
 ~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
 
 (
-// Next
-// 1.  Create an effects list
-//     ** (this should be added to the init routine)
+// add a couple of effects.
+// *** should add a list argument for setting initial values of effect
 
-~effectlist = EffectList.new;
-
-// and add a couple of effects.
-// should add a list argument for initial values of effect
-
-~effectlist.addEffect(\reverb, "freeverb" );
-~effectlist.addEffect(\distortion, "dist" );
+~effectList.addEffect(\reverb, "freeverb" );
+~effectList.addEffect(\distortion, "dist" );
 )
 
 
+// get a list of available effects and their bus index
 ~addrBook.send(\rose, "/busListMsg");
-
-
 
 (
 // 2. Set up a Pstream with some basic defaults.
@@ -80,8 +73,8 @@ Pdefn(\sinsawTarget, \rose, inf);
 Pdefn(\sinsaw2Target, \rose, inf);
 Pdefn(\sinsawInstrument, \saw, inf);
 Pdefn(\sinsaw2Instrument, \saw, inf);
-Pdefn(\sinsawOutBus, ~effectlist.busIndex(\masterOut), inf);
-Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\masterOut), inf);
+Pdefn(\sinsawOutBus, ~effectList.busIndex(\masterOut), inf);
+Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\masterOut), inf);
 Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60].midicps), inf));
 Pdefn(\sinsawDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinsawAmp, 0.15, inf);
@@ -100,19 +93,19 @@ Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 // 5. change the p midstream:
 
 
-Pdefn(\sinsawOutBus, ~effectlist.busIndex(\reverb), inf);
-Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\reverb), inf);
+Pdefn(\sinsawOutBus, ~effectList.busIndex(\reverb), inf);
+Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\reverb), inf);
 
-~effectlist.set(\reverb, \mix, 0.5);
-~effectlist.set(\reverb, \room, 0.99);
-~effectlist.set(\reverb, \damp, 0.01);
-~effectlist.set(\reverb, \mix, 0.99);
+~effectList.set(\reverb, \mix, 0.5);
+~effectList.set(\reverb, \room, 0.99);
+~effectList.set(\reverb, \damp, 0.01);
+~effectList.set(\reverb, \mix, 0.99);
 
 Pdefn(\sinsaw2Instrument, \sin, inf);
 
-Pdefn(\sinsaw2OutBus, ~effectlist.busIndex(\distortion), inf);
-~effectlist.set(\distortion, \postGain, 0.12);
-~effectlist.set(\distortion, \preGain, 50.0);
+Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\distortion), inf);
+~effectList.set(\distortion, \postGain, 0.12);
+~effectList.set(\distortion, \preGain, 50.0);
 
 Pdefn(\sinsawInstrument, \sin, inf);
 
@@ -127,8 +120,8 @@ Pdefn(\sinsawInstrument, \sin, inf);
 
 // 7. free the effects synths and remove from the list
 (
-~effectlist.free(\reverb);
-~effectlist.free(\distortion);
+~effectList.free(\reverb);
+~effectList.free(\distortion);
 )
 
 // other stuff later:
