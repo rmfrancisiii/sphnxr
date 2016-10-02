@@ -1,11 +1,21 @@
 ("~/git/sphnxr/init.scd").loadPaths;
 
 ~rose=~addrBook.at(\rose);
-~rose.effectList.addEffect(\reverb, \freeverb);
-~rose.effectList.list.postln;
-~rose.effectList;
+~me=~addrBook.me;
 
+~rose.addEffect(\reverb, \freeverb);
+~rose.addEffect(\distortion, \dist);
+~rose.listEffects;
+~rose.effectNames;
+~rose.effectBusIndex(\distortion);
+~rose.effectBus(\distortion);
 
+~rose.effectSet(\distortion, );
+
+~rose.effectFree(\distortion);
+~rose.listEffects;
+~rose.effectFree(\reverb);
+~rose.listEffects;
 
 ~addrBook.at(\rose).effectList.addEffect(\distortion, \dist);
 ~addrBook.at(\rose).effectList.busIndex(\distortion);

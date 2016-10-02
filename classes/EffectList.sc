@@ -6,20 +6,19 @@ EffectList {
 	init { dict = Dictionary.newFrom(List[
 		\masterOut, List[Server.local.outputBus]])}
 
-	printOn {
+	printOn {|stream|
 		this.dict.keysValuesDo{|key, value|
-			(key++":   ").post;
-			value[0].index.postln;}
+			stream << key <<":   " << value[0].index << "\n"}
 	}
-
-
-	//	printOn { |stream|
-		//	stream << this.class.name << "(" <<* [name, addr, online, effectList.list] << ")"
-	//	}
 
 	list { ^dict.getPairs }
 
 	names { ^dict.keys }
+
+	bus {|key|
+		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
+		^(this.dict[key.asSymbol]).at(0);
+	}
 
 	busIndex {|key|
 		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
@@ -33,7 +32,7 @@ EffectList {
 		dict.add(key.asSymbol -> List[newBus, newSynth])
 	}
 
-	free {|key|
+	effectFree {|key|
 		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
 		if (key==\masterOut, {"cannot free masterOut".postln; ^nil});
 		this.dict[key.asSymbol].at(1).free;
@@ -41,7 +40,7 @@ EffectList {
 		(key + "Effect removed").postln;
 	}
 
-	set {|key, control, value|
+	effectSet {|key, control, value|
 		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
 		this.dict[key.asSymbol].at(1).set(control.asSymbol, value);
 	}
