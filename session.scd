@@ -20,16 +20,16 @@
 // *** should add a list argument for setting initial values of effect
 // *** should be peer.addEffect
 
+~addrBook.send(\rose, "/addEffect", "reverb", "freeverb");
+~addrBook.send(\rose, "/addEffect", "distortion1", "dist");
 
-~effectList.addEffect(\reverb, "freeverb" );
-~effectList.addEffect(\distortion, "dist" );
 )
 
 
 // get a list of available effects and their bus index
 
 // *** should be peer.listEffects
-~addrBook.send(\river, "/busListMsg");
+~addrBook.send(\rose, "/busListMsg");
 
 (
 // 2. Set up a Pstream with some basic defaults.
@@ -90,7 +90,7 @@
 
 // Pdefn(\sinsawTarget, \rose, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
-Pdefn(\sinsawOutBus, 6, inf);
+Pdefn(\sinsawOutBus, 6, inf);   // Pdefn(\sinsawOutBus, \distortion, inf);
 
 // Pdefn(\sinsaw2Target, \rose, inf);
 Pdefn(\sinsaw2Instrument, \sin, inf);
