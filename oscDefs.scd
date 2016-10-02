@@ -33,6 +33,7 @@ OSCdef.newMatching(\addEffect,
 		~addrBook.me.addEffect(msg[1].asSymbol, msg[2]);
 }, "/addEffect"); // path matching
 
+
 //request to set effect bus
 OSCdef.newMatching(\effectSet,
 	{|msg, time, addr, recvPort |

@@ -3,8 +3,17 @@ EffectList {
 
 	*new { ^super.new.init }
 
-	init { dict = Dictionary.newFrom(List[
-		\masterOut, List[Server.local.outputBus]])}
+	init {
+
+		// if its the local machine, ie AddrBook.me
+		dict = Dictionary.newFrom(List[
+		\masterOut, List[Server.local.outputBus]])
+
+		// if its on a remote Peer
+		// it should be different
+
+
+	}
 
 	printOn {|stream|
 		this.dict.keysValuesDo{|key, value|
@@ -44,5 +53,9 @@ EffectList {
 		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
 		this.dict[key.asSymbol].at(1).set(control.asSymbol, value);
 	}
+
+	effectGetControls { |key|
+	}
+
 
 }
