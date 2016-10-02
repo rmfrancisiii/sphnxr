@@ -30,18 +30,8 @@ OSCdef.newMatching(\testAudio,
 //request for new effects bus
 OSCdef.newMatching(\addEffect,
 	{|msg, time, addr, recvPort |
-
 		~effectList.addEffect(msg[1].asSymbol, msg[2]);
-
-
-		//var reply=List.new;
-		//~effectList.dict.keysValuesDo({|key, value|
-		//	reply.add(key);
-		//	reply.add(value[0].index);
-		//});
-		//addr.sendMsg("/busReply", *reply);
 }, "/addEffect"); // path matching
-
 
 //request for list of effects busses
 OSCdef.newMatching(\busListMsg,

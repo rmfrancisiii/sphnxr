@@ -6,6 +6,17 @@ EffectList {
 	init { dict = Dictionary.newFrom(List[
 		\masterOut, List[Server.local.outputBus]])}
 
+	printOn {
+		this.dict.keysValuesDo{|key, value|
+			(key++":   ").post;
+			value[0].index.postln;}
+	}
+
+
+	//	printOn { |stream|
+		//	stream << this.class.name << "(" <<* [name, addr, online, effectList.list] << ")"
+	//	}
+
 	list { ^dict.getPairs }
 
 	names { ^dict.keys }
