@@ -10,26 +10,51 @@
 
 ("~/git/sphnxr/init.scd").loadPaths;
 
+
+OSCdef.all;
+
+
 // test the new network
 ~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
 ~addrBook.peers; // who's out there?
 
-(
+
+// we could automate this?
+~me=~addrBook.me;
+~rose=~addrBook.at(\rose);
+~river=~addrBook.at(\river);
+
+
 // add a couple of effects.
 // *** should add a list argument for setting initial values of effect
 // *** should be peer.addEffect
 
-~addrBook.send(\rose, "/addEffect", "reverb", "freeverb");
-~addrBook.send(\rose, "/addEffect", "distortion1", "dist");
+// locally:
+~rose.addEffect(\reverb, \freeverb);
+~rose.addEffect(\distortion, \dist);
 
-)
 
+
+// remotely
+~addrBook.send(\river, "/addEffect", "reverb", "freeverb");
+~addrBook.send(\river, "/addEffect", "distortion1", "dist");
+
+// this adds an effect on a remote peer,
+//
+// *** BUT: we need to replicate this data on the local machine's Peer object
+// *** relatedly: currently a synth message still needs the bus managed manually.
+//        eg: Pdefn(\sinsawOutBus, 6, inf);
+//
+// instead we should be referencing this by the name of the effectList:
+// Pdefn(\sinsawOutBus, \distortion, inf);
+// and have the OSCDef or the OSC sender function doing a lookup
 
 // get a list of available effects and their bus index
-
 // *** should be peer.listEffects
-~addrBook.send(\rose, "/busListMsg");
+~addrBook.send(\river, "/busListMsg");
+
+// *** also need to set up a responder for the current Control values of a synth
 
 (
 // 2. Set up a Pstream with some basic defaults.

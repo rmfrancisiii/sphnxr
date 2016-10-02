@@ -33,6 +33,19 @@ OSCdef.newMatching(\addEffect,
 		~addrBook.me.addEffect(msg[1].asSymbol, msg[2]);
 }, "/addEffect"); // path matching
 
+//request to set effect bus
+OSCdef.newMatching(\effectSet,
+	{|msg, time, addr, recvPort |
+		~addrBook.me.effectSet(msg[1].asSymbol, msg[2], msg[3]);
+}, "/effectSet"); // path matching
+
+//request to free an effect bus
+OSCdef.newMatching(\effectFree,
+	{|msg, time, addr, recvPort |
+		~addrBook.me.effectFree(msg[1].asSymbol, msg[2]);
+}, "/effectFree"); // path matching
+
+
 //request for list of effects busses
 OSCdef.newMatching(\busListMsg,
 	{|msg, time, addr, recvPort |

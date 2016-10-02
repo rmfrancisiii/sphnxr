@@ -1,5 +1,6 @@
 ("~/git/sphnxr/init.scd").loadPaths;
 
+~addrBook.peers;
 ~rose=~addrBook.at(\rose);
 ~me=~addrBook.me;
 
@@ -10,25 +11,33 @@
 ~rose.effectBusIndex(\distortion);
 ~rose.effectBus(\distortion);
 
-~rose.effectSet(\distortion, );
+
+// shift+Command+T to dump node tree
+~rose.effectSet(\distortion, \preGain, 12);
+~rose.effectSet(\distortion, \postGain, 0.12);
+
+// shift+Command+T to dump node tree
 
 ~rose.effectFree(\distortion);
 ~rose.listEffects;
 ~rose.effectFree(\reverb);
 ~rose.listEffects;
 
-~addrBook.at(\rose).effectList.addEffect(\distortion, \dist);
-~addrBook.at(\rose).effectList.busIndex(\distortion);
 
-~addrBook.peers;
-~addrBook.names;
-~addrBook.at(\rose).postln;
-
+// Try it all remotely:
 
 ~addrBook.send(\rose, "/busListMsg");
-
 ~addrBook.send(\rose, "/addEffect", "reverb", "freeverb");
-~addrBook.send(\rose, "/addEffect", "distortion1", "dist");
+~addrBook.send(\rose, "/addEffect", "distortion", "dist");
+// shift+Command+T to dump node tree
+
+~addrBook.send(\rose, "/effectSet", \distortion, \preGain, 20);
+// shift+Command+T to dump node tree
+~addrBook.send(\rose, "/busListMsg");
+
+s.queryAllNodes;
+s.dumpTree;
 
 ~addrBook.send(\rose, "/busListMsg");
 
+~addrBook.send(\rose, "/busListMsg");
