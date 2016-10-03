@@ -1,0 +1,20 @@
+// dev notes
+
+Next up: encapsulate the manual network messaging into the Peer.effectHandler methods
+instead of: addrBook.send(\Peer, "/effectHandler", args)
+it's:  RemotePeer.effectHandler(\key, args)
+
+After that, set up the local Peer.EffectList to copy bus information from remote Peers, using bus.index info instead of instantiating a bus on the local machine.
+
+After that, set up PStream.send  to use that Peer.EffectList bus information so that
+instead of: Pdefn(\Peer, 6, inf);
+it's: Pdefn(\Peer, \reverb, inf)
+
+After that, need to set up a way to use SynthDescLib to get control values from remote machines.
+
+[5:21]
+oh, and currently you can change those control values locally with:
+~me.effectSet(\distortion, \postGain, 0.12);
+
+or on a remote peer with:
+~addrBook.send(\river, "/effectSet", \distortion, \postGain, 0.12);

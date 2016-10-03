@@ -1,8 +1,14 @@
 + Peer {
 
-	addEffect {|key, effect| this.effectList.addEffect(key, effect)}
+	addEffect {|key, effect|
+		//this.effectList.addEffect(key, effect)
+		this.sendMsg("/addEffect", key, effect)
+	}
 
-	listEffects { ^this.effectList.list }
+	listEffects {
+		//^this.effectList.list
+		this.sendMsg("/listEffects")
+	}
 
 	effectNames { ^this.effectList.names }
 

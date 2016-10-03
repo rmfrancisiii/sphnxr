@@ -30,7 +30,7 @@ OSCdef.newMatching(\testAudio,
 //request for new effects bus
 OSCdef.newMatching(\addEffect,
 	{|msg, time, addr, recvPort |
-		~addrBook.me.addEffect(msg[1].asSymbol, msg[2]);
+		~addrBook.me.effectList.addEffect(msg[1].asSymbol, msg[2]);
 }, "/addEffect"); // path matching
 
 
@@ -48,7 +48,7 @@ OSCdef.newMatching(\effectFree,
 
 
 //request for list of effects busses
-OSCdef.newMatching(\busListMsg,
+OSCdef.newMatching(\listEffects,   //\busListMsg,
 	{|msg, time, addr, recvPort |
 		var reply=List.new;
 		~addrBook.me.effectList.dict.keysValuesDo({|key, value|
@@ -56,7 +56,7 @@ OSCdef.newMatching(\busListMsg,
 			reply.add(value[0].index);
 		});
 		addr.sendMsg("/busReply", *reply);
-}, "/busListMsg"); // path matching
+}, "/listEffects"); //"/busListMsg"); // path matching
 
 //display response containing list of effects busses
 OSCdef.newMatching(\busReply,
