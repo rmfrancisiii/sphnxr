@@ -12,9 +12,22 @@ it's: Pdefn(\Peer, \reverb, inf)
 
 After that, need to set up a way to use SynthDescLib to get control values from remote machines.
 
-[5:21]
 oh, and currently you can change those control values locally with:
 ~me.effectSet(\distortion, \postGain, 0.12);
 
 or on a remote peer with:
 ~addrBook.send(\river, "/effectSet", \distortion, \postGain, 0.12);
+
+
+	//effect handlers:
+	// . Add Effect
+	//    . take defaults for args
+	//    . set different output bus
+	// . Update List on local machine
+	// . output list
+	// . return bus.index
+	// . delete effect
+	// . get control value
+	// . set control value
+
+

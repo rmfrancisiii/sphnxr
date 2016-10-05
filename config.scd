@@ -7,7 +7,7 @@ s.options.memSize_(32768);
 //s.options.outDevice = "JackRouter";
 //s.options.inDevice = "JackRouter";
 
-~win = Window("network").minimize; // minimize; // network window status, eg: .minimize (to hide) or .front (to show)
+~win = Window("network").minimize; //front; // network window status, eg: .minimize (to hide) or .front (to show)
 
 ~hostname = ("hostname".unixCmdGetStdOut.split($.)[0]).asSymbol;
 ("hostname: " +/+ ~hostname).postln;

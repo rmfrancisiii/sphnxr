@@ -1,13 +1,30 @@
 + Peer {
 
+	//effect handlers:
+	// . Add Effect
+	//    . take defaults for args
+	//    . set different output bus
+	// . Update List on local machine
+	// . output list
+	// . return bus.index
+	// . delete effect
+	// . get control value
+	// . set control value
+
 	addEffect {|key, effect|
 		//this.effectList.addEffect(key, effect)
 		this.sendMsg("/addEffect", key, effect)
 	}
 
 	listEffects {
-		//^this.effectList.list
-		this.sendMsg("/listEffects")
+		// this is the local copy
+		^this.effectList.list
+	}
+
+	effectUpdate{
+		// this requests an update for the local copy,
+		// for the receiver, see \effectUpdateReply in oscDefs
+		this.sendMsg("/effectUpdate")
 	}
 
 	effectNames { ^this.effectList.names }
@@ -18,7 +35,10 @@
 
 	effectFree {|key| ^this.effectList.effectFree(key)}
 
-	effectSet {|key, control, value| this.effectList.effectSet(key, control, value);}
+	effectSet {|key, control, value| this.effectList.effectSet(key, control, value)}
+
+	//NOT done
+	// effectGet {|key, control, value| this.effectList.effectGet();}
 
 }
 

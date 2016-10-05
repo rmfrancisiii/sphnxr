@@ -40,6 +40,13 @@ OSCdef.newMatching(\effectSet,
 		~addrBook.me.effectSet(msg[1].asSymbol, msg[2], msg[3]);
 }, "/effectSet"); // path matching
 
+// **** not set up yet
+//request to GET effect bus control values
+OSCdef.newMatching(\effectGet,
+	{|msg, time, addr, recvPort |
+//		~addrBook.me.effectSet(msg[1].asSymbol, msg[2], msg[3]);
+}, "/effectGet"); // path matching
+
 //request to free an effect bus
 OSCdef.newMatching(\effectFree,
 	{|msg, time, addr, recvPort |
@@ -48,7 +55,9 @@ OSCdef.newMatching(\effectFree,
 
 
 //request for list of effects busses
-OSCdef.newMatching(\listEffects,   //\busListMsg,
+
+// change from \listEffects to \effectUpdate
+OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 	{|msg, time, addr, recvPort |
 		var reply=List.new;
 		~addrBook.me.effectList.dict.keysValuesDo({|key, value|
@@ -56,12 +65,19 @@ OSCdef.newMatching(\listEffects,   //\busListMsg,
 			reply.add(value[0].index);
 		});
 		addr.sendMsg("/busReply", *reply);
-}, "/listEffects"); //"/busListMsg"); // path matching
+}, "/effectUpdate"); //"/busListMsg"); // path matching
 
 //display response containing list of effects busses
-OSCdef.newMatching(\busReply,
+
+// *** instead of displaying, use this to repopulate Peer.effectList
+//     with index (not bus)
+// *** ONLY if its not peers.me
+//
+
+OSCdef.newMatching(\effectUpdateReply,
 	{|msg, time, addr, recvPort |
 		"Bus list for \\".post;
-		(~addrBook.findname(addr)).postln;
-		msg = Dictionary.newFrom(msg.drop(1)).postln
-}, "/busReply"); // path matching
+		//(~addrBook.findname(addr)).postln;
+		//msg = Dictionary.newFrom(msg.drop(1)).postln
+		(~addrBook.findname(addr)).effectList=Dictionary.newFrom(msg.drop(1))
+}, "/effectUpdateReply"); // path matching

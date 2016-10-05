@@ -11,20 +11,17 @@
 ("~/git/sphnxr/init.scd").loadPaths;
 
 
-OSCdef.all;
-
-
 // test the new network
 ~addrBook.testAllAudio;
 ~addrBook.testAllMsg;
 ~addrBook.peers; // who's out there?
 
 
-// we could automate this?
-~me=~addrBook.me;
-~rose=~addrBook.at(\rose);
-~river=~addrBook.at(\river);
+// This should create an env variable named for each peer in an address book that references the peer directly
 
+~addrBook.names.do({ arg item, i;
+	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
+	item.postln });
 
 // add a couple of effects.
 // *** should add a list argument for setting initial values of effect
@@ -34,11 +31,10 @@ OSCdef.all;
 ~rose.addEffect(\reverb, \freeverb);
 ~rose.addEffect(\distortion, \dist);
 
-
-
 // remotely
-~addrBook.send(\river, "/addEffect", "reverb", "freeverb");
-~addrBook.send(\river, "/addEffect", "distortion1", "dist");
+~river.addEffect(\distortion, \dist);
+~river.addEffect(\reverb, \freeverb);
+
 
 // this adds an effect on a remote peer,
 //
@@ -46,13 +42,25 @@ OSCdef.all;
 // *** relatedly: currently a synth message still needs the bus managed manually.
 //        eg: Pdefn(\sinsawOutBus, 6, inf);
 //
-// instead we should be referencing this by the name of the effectList:
+// instead we should be referencing this by the name/key of the effect from the peer's effectList:
 // Pdefn(\sinsawOutBus, \distortion, inf);
 // and have the OSCDef or the OSC sender function doing a lookup
 
 // get a list of available effects and their bus index
+
 // *** should be peer.listEffects
-~addrBook.send(\river, "/busListMsg");
+
+// old:  ~addrBook.send(\river, "/busListMsg");
+
+~rose.listEffects;
+~river.listEffects;
+
+// ~rose.effectBusIndex(\distortion);
+// ~rose.effectBus(\distortion);
+
+// ~river.effectBusIndex(\distortion);
+// ~river.effectBus(\distortion);
+
 
 // *** also need to set up a responder for the current Control values of a synth
 

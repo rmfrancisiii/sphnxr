@@ -54,8 +54,25 @@ EffectList {
 		this.dict[key.asSymbol].at(1).set(control.asSymbol, value);
 	}
 
-	effectGetControls { |key|
+	// get effect control values
+	effectGet { |key|
+
+		/// NOT done:
+		/*	f = { |synth|
+			var x = (), d = SynthDescLib.global[synth.defName.asSymbol];
+			d.notNil.if { d.controls.do { |c| x.put(c.name, c.defaultValue) } };
+			x
+		};
+
+		// asynchronous !
+
+		g = { |synth|
+			var x = (), d = SynthDescLib.global[synth.defName.asSymbol];
+			d.notNil.if { d.controls.do { |c|  synth.get(c.name,  { |y|
+				x.put(c.name, y) }) } };
+			x
+		}*/
+
+
 	}
-
-
 }
