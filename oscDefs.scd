@@ -61,7 +61,7 @@ OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 			reply.add(key);
 			reply.add(value[0].index);
 		});
-		addr.sendMsg("/busReply", *reply);
+		addr.sendMsg("/effectUpdateReply", *reply);
 		"sending update reply".postln;
 		reply.postln;
 }, "/effectUpdate"); //"/busListMsg"); // path matching
@@ -75,9 +75,16 @@ OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 
 OSCdef.newMatching(\effectUpdateReply,
 	{|msg, time, addr, recvPort |
-		"Bus list Reply for \\".post;
-		(~addrBook.findname(addr)).postln;
-		msg = Dictionary.newFrom(msg.drop(1)).postln
-		(~addrBook.findname(addr)).effectList=msg;
-		// Dictionary.newFrom(msg.drop(1))
+		var name =(~addrBook.findname(addr));
+		var newMsg = Dictionary.newFrom(msg.drop(1));
+		~addrBook.at(name).effectList.dict=newMsg;
 }, "/effectUpdateReply"); // path matching
+
+
+
+
+
+
+
+
+

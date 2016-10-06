@@ -1,5 +1,5 @@
 EffectList {
-	var <dict, <me;
+	var <>dict, <>me;
 
 	*new { ^super.new.init }
 
@@ -30,8 +30,11 @@ EffectList {
 	}
 
 	busIndex {|key|
+		"bus index key:".post;
+		key.postln;
 		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
-		^((this.dict[key.asSymbol]).at(0)).index
+		^this.dict.at(key.asSymbol);
+		//^((this.dict[key.asSymbol]).at(0)).index
 	}
 
 
