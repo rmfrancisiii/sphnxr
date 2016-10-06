@@ -24,7 +24,8 @@
 	effectUpdate{
 		// this requests an update for the local copy,
 		// for the receiver, see \effectUpdateReply in oscDefs
-		this.sendMsg("/effectUpdate")
+		this.sendMsg("/effectUpdate");
+		"sending update request".postln;
 	}
 
 	effectNames { ^this.effectList.names }

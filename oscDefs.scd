@@ -54,9 +54,6 @@ OSCdef.newMatching(\effectFree,
 }, "/effectFree"); // path matching
 
 
-//request for list of effects busses
-
-// change from \listEffects to \effectUpdate
 OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 	{|msg, time, addr, recvPort |
 		var reply=List.new;
@@ -65,6 +62,8 @@ OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 			reply.add(value[0].index);
 		});
 		addr.sendMsg("/busReply", *reply);
+		"sending update reply".postln;
+		reply.postln;
 }, "/effectUpdate"); //"/busListMsg"); // path matching
 
 //display response containing list of effects busses
@@ -76,8 +75,9 @@ OSCdef.newMatching(\effectUpdate,   //\busListMsg,
 
 OSCdef.newMatching(\effectUpdateReply,
 	{|msg, time, addr, recvPort |
-		"Bus list for \\".post;
-		//(~addrBook.findname(addr)).postln;
-		//msg = Dictionary.newFrom(msg.drop(1)).postln
-		(~addrBook.findname(addr)).effectList=Dictionary.newFrom(msg.drop(1))
+		"Bus list Reply for \\".post;
+		(~addrBook.findname(addr)).postln;
+		msg = Dictionary.newFrom(msg.drop(1)).postln
+		(~addrBook.findname(addr)).effectList=msg;
+		// Dictionary.newFrom(msg.drop(1))
 }, "/effectUpdateReply"); // path matching
