@@ -16,7 +16,6 @@
 ~addrBook.testAllMsg;
 ~addrBook.peers; // who's out there?
 
-
 // This should create an env variable named for each peer in the AddrBook
 (
 ~me=~addrBook.me;
@@ -25,49 +24,54 @@
 	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
 	item.postln });
 )
+
 // add a couple of effects.
-~rose.addEffect(\reverb, \freeverb);
-~rose.addEffect(\distortion, \dist);
+(
+~me.addEffect(\reverb, \freeverb);
+~me.addEffect(\reverb2, \freeverb);
+~me.addEffect(\distortion, \dist);
+)
 
-// remotely
-~river.addEffect(\distortion, \dist);
-~river.addEffect(\reverb, \freeverb);
+~river.effectsList;
+~me.effectsList;
 
-~rose.listEffects;
-~river.listEffects;
+(
+~river.addEffect(\rreverb, \freeverb);
+~river.addEffect(\rreverb2, \freeverb);
+~river.addEffect(\rdistortion, \dist);
+)
+~river.effectsList;
+~me.effectsList;
 
-// this adds an effect on a remote peer,
-//
-// *** BUT: we need to replicate this data on the local machine's Peer object
-// *** relatedly: currently a synth message still needs the bus managed manually.
+~river.effectIndex(\rdistortion);
+~river.effectIndex(\masterOut);
+~river.effectIndex(\error);
+
+
+~me.effectIndex(\reverb2);
+~me.freeEffect(\reverb2);
+~me.effectsList;
+
+~river.freeEffect(\rreverb2);
+~river.effectsList;
+~river.effectIndex(\rreverb2);
+~river.effectIndex(\rreverb);
+
+
+
+
+
+// currently a synth message still needs the bus managed manually.
 //        eg: Pdefn(\sinsawOutBus, 6, inf);
 //
 // instead we should be referencing this by the name/key of the effect from the peer's effectList:
 // Pdefn(\sinsawOutBus, \distortion, inf);
 // and have the OSCDef or the OSC sender function doing a lookup
 
-// get a list of available effects and their bus index
-
-// *** should be peer.listEffects
-
-// old:  ~addrBook.send(\river, "/busListMsg");
-
-~rose.listEffects;
-~river.listEffects;
-
-~river.effectUpdate;
-~rose.effectUpdate;
-
-~river.effectBusIndex(\distortion);
-~river.effectBusIndex(\reverb);
-~river.effectBusIndex(\masterOut);
-~river.effectBusIndex(\error);
-
-// ~river.effectBusIndex(\distortion);
-// ~river.effectBus(\distortion);
-
 
 // *** also need to set up a responder for the current Control values of a synth
+
+
 
 (
 // 2. Set up a Pstream with some basic defaults.
@@ -173,17 +177,19 @@ Pdefn(\sinsawOutBus, 0, inf);
 Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\reverb), inf);
 
 // *** should be Peer.setEffect
-~effectList.set(\reverb, \mix, 0.9);
-~effectList.set(\reverb, \room, 0.99);
-~effectList.set(\reverb, \damp, 0.01);
-~effectList.set(\reverb, \mix, 0.99);
+//~effectList.set(\reverb, \mix, 0.9);
+//~effectList.set(\reverb, \room, 0.99);
+//~effectList.set(\reverb, \damp, 0.01);
+//~effectList.set(\reverb, \mix, 0.99);
 
 Pdefn(\sinsaw2Instrument, \sin, inf);
 Pdefn(\sinsaw2Instrument, \saw, inf);
 
-Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\distortion), inf);
-~effectList.set(\distortion, \postGain, 0.12);
-~effectList.set(\distortion, \preGain, 50.0);
+
+
+//Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\distortion), inf);
+//~effectList.set(\distortion, \postGain, 0.12);
+//~effectList.set(\distortion, \preGain, 50.0);
 
 Pdefn(\sinsaw2Instrument, \sin, inf);
 
@@ -206,12 +212,3 @@ Pdefn(\sinsaw2Instrument, \sin, inf);
 ~effectList.free(\reverb);
 ~effectList.free(\distortion);
 )
-
-// *** other stuff later:
-
-/// ***get a list of available synths and/or controls
-
-// SynthDescLib.global.read;
-// SynthDescLib.global.browse;
-// SynthDescLib.global.at(\ixibass);
-// SynthDescLib.global.at(\freeverb);

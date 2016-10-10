@@ -13,4 +13,4 @@
 
 "creating address book".postln;
 ~addrBook.addMe(~hostname); // add this machine
-//~hail = Hail(~addrBook);
+~hail = Hail(~addrBook);
