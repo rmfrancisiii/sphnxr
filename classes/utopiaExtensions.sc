@@ -12,34 +12,26 @@
 	// . set control value
 
 	addEffect {|key, effect|
-		//this.effectList.addEffect(key, effect)
-		this.sendMsg("/addEffect", key, effect)
+		this.sendMsg("/addEffectOSC", key, effect)
 	}
 
-	listEffects {
-		// this is the local copy
-		^this.effectList.list
+	freeEffect {|key|
+		this.sendMsg("/freeEffectOSC", key)
 	}
 
-	effectUpdate{
-		// this requests an update for the local copy,
-		// for the receiver, see \effectUpdateReply in oscDefs
-		this.sendMsg("/effectUpdate");
-		"sending update request".postln;
-	}
+	bankList { ^this.effectBank.bankList}
 
-	effectNames { ^this.effectList.names }
+	effectIndex {|key| ^this.effectList.effectIndex(key)}
 
-	effectBusIndex {|key| ^this.effectList.busIndex(key)}
+	effectsList { ^this.effectList.names}
 
-	effectBus {|key| ^this.effectList.bus(key)}
 
-	effectFree {|key| ^this.effectList.effectFree(key)}
-
-	effectSet {|key, control, value| this.effectList.effectSet(key, control, value)}
+	// effectSet {|key, control, value|
+	// this.effectList.effectSet(key, control, value)}
 
 	//NOT done
-	// effectGet {|key, control, value| this.effectList.effectGet();}
+	// effectGet {|key, control, value|
+	// this.effectList.effectGet();}
 
 }
 
@@ -67,5 +59,11 @@
 	findname{|addr|
 		^(this.peers.detect({arg item, i; (item.addr==addr)})).name;
 	}
+
+	broadcastEffectList {
+		var msg = ~me.bankList.getPairs;
+		"updating Peers' EffectLists".postln;
+		this.sendAll("/updateEffectListOSC", *msg);
+    }
 
 }

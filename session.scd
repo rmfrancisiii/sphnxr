@@ -16,10 +16,11 @@
 ~addrBook.testAllMsg;
 ~addrBook.peers; // who's out there?
 
-~me=~addrBook.me;
 
 // This should create an env variable named for each peer in the AddrBook
 (
+~me=~addrBook.me;
+
 ~addrBook.names.do({ arg item, i;
 	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
 	item.postln });
@@ -33,6 +34,7 @@
 ~river.addEffect(\reverb, \freeverb);
 
 ~rose.listEffects;
+~river.listEffects;
 
 // this adds an effect on a remote peer,
 //
@@ -53,10 +55,13 @@
 ~rose.listEffects;
 ~river.listEffects;
 
+~river.effectUpdate;
 ~rose.effectUpdate;
 
-// ~rose.effectBusIndex(\distortion);
-// ~rose.effectBus(\distortion);
+~river.effectBusIndex(\distortion);
+~river.effectBusIndex(\reverb);
+~river.effectBusIndex(\masterOut);
+~river.effectBusIndex(\error);
 
 // ~river.effectBusIndex(\distortion);
 // ~river.effectBus(\distortion);
