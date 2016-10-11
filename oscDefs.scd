@@ -1,7 +1,10 @@
 OSCdef.newMatching(\synthMsg,
 	{|msg, time, addr, recvPort |
-		msg = Dictionary.newFrom(msg.drop(1));
-		Synth.head(~synthGroup, msg[\instrument], msg.getPairs);
+		var dict = Dictionary.newFrom(msg.drop(1));
+		var inst = dict.removeAt(\instrument);
+		var busnum = ~me.effectBank.busIndex(dict[\outBus]);
+		dict.add(\outBus -> busnum);
+		Synth.head(~synthGroup, inst, dict.getPairs);
 }, "/synthMsg"); // path matching
 
 

@@ -48,7 +48,8 @@
 ~river.effectIndex(\error);
 
 
-~me.effectIndex(\reverb2);
+~me.effectIndex(\reverb);
+~me.effectIndex(\distortion);
 ~me.freeEffect(\reverb2);
 ~me.effectsList;
 
@@ -130,13 +131,13 @@
 (
 // 3. now set the individual pdefns
 
-// Pdefn(\sinsawTarget, \rose, inf);
+Pdefn(\sinsawTarget, \rose, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
-Pdefn(\sinsawOutBus, 6, inf);   // Pdefn(\sinsawOutBus, \distortion, inf);
+Pdefn(\sinsawOutBus, \masterOut, inf);
 
-// Pdefn(\sinsaw2Target, \rose, inf);
-Pdefn(\sinsaw2Instrument, \sin, inf);
-Pdefn(\sinsaw2OutBus, 4, inf);
+Pdefn(\sinsaw2Target, \rose, inf);
+Pdefn(\sinsaw2Instrument, \saw, inf);
+Pdefn(\sinsaw2OutBus, 16, inf);
 
 
 Pdefn(\sinsawFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
@@ -146,9 +147,9 @@ Pdefn(\sinsawAtt, 0.75, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 
 
-// Pdefn(\ixiTarget, \rose, inf);
+Pdefn(\ixiTarget, \rose, inf);
 Pdefn(\ixiInstrument, \ixibass, inf);
-Pdefn(\ixiOutBus, 6, inf);
+Pdefn(\ixiOutBus, \masterOut, inf);
 Pdefn(\ixiFreq, Pshuf(([50,52,54,55,58,60]-5).midicps, inf));
 Pdefn(\ixiAmp, 0.1, inf);
 Pdefn(\ixiRQ, 0.01, inf);
@@ -161,9 +162,18 @@ Pdefn(\ixiWait, Pseq([ 0.125, 0.25, 0.5, 0.25, 0.25, 0.5, 0.25, 1.0], inf));
 // 4. start the pstreams
 (
 ~sinsaw.play;
+~sinsaw.stop;
 ~sinsaw2.play;
 ~ixibass.play;
 )
+
+
+Pdefn(\sinsawInstrument, \saw, inf);
+Pdefn(\sinsawOutBus, \reverb, inf);
+Pdefn(\sinsawOutBus, \distortion, inf);
+Pdefn(\sinsawOutBus, \masterOut, inf);
+Pdefn(\ixiOutBus, \reverb, inf);
+
 
 /// change the target Peer
 //Pdefn(\sinsawTarget, \river, inf);
@@ -203,12 +213,13 @@ Pdefn(\sinsaw2Instrument, \sin, inf);
 ~ixibass.stop;
 )
 
-
+// *** LIES: actually i don't think this works any more
+// we need a new method for freeing all busses and synths
 // 7. free the effects synths and remove from the list
 // *** should be peer.freeEffect
 // *** Is this freeing the bus too? or just the synth?
 
-(
-~effectList.free(\reverb);
-~effectList.free(\distortion);
-)
+// (
+// ~effectList.free(\reverb);
+// ~effectList.free(\distortion);
+// )
