@@ -13,9 +13,7 @@ EffectBank {
 	}
 
 	busIndex {|key|
-		"bus index key:".post;
-		key.postln;
-		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
+		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^0}); // return 0 for master bus
 		^((this.dict[key.asSymbol]).at(0)).index
 	}
 
