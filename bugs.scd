@@ -9,3 +9,5 @@
 //    in the session file will break the oscdef.
 //    (also need to look for other misuses of enironment variables like this.
 
+// 4. we need a new method for freeing all busses and synths
+

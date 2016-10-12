@@ -1,12 +1,9 @@
 // dev notes
 
-// After that, set up PStream.send  to use that Peer.EffectList bus information so that
-// instead of: Pdefn(\Peer, 6, inf);
-// it's: Pdefn(\Peer, \reverb, inf)
+// need to set up a way to use SynthDescLib to get control values from remote machines.
+
 //
-// After that, need to set up a way to use SynthDescLib to get control values from remote machines.
-//
-// * LIES:  oh, and currently you can change those control values locally with:
+// old way:
 //          ~me.effectSet(\distortion, \postGain, 0.12);
 //
 //          or on a remote peer with:
@@ -14,57 +11,82 @@
 
 
 
-// *** other notes for later:
-// Dump Node Tree with Controls in the SC Language menu
-/// ***get a list of available synths and/or controls
+// lookup a named effect
+SynthDescLib.global.at(~addrBook.me.effectBank.dict[\reverb][1].defName);
 
-SynthDescLib.global.read;
-SynthDescLib.global.browse;
-SynthDescLib.global.at(\ixibass);
-SynthDescLib.global.at(\freeverb);
+// GET All Effect Controls Names:
 
-
-f = { |synth|
-        var x = (), d = SynthDescLib.global[synth.defName.asSymbol];
-        d.notNil.if { d.controls.do { |c| x.put(c.name, c.defaultValue) } };
-        x
-};
-
-// asynchronous !
-
-g = { |synth|
-        var x = (), d = SynthDescLib.global[synth.defName.asSymbol];
-        d.notNil.if { d.controls.do { |c|  synth.get(c.name,  { |y|
-x.put(c.name, y) }) } };
-        x
-}
+(
+~addrBook.me.effectBank.dict.keysValuesDo{
+	|key, value|
+	var synth = value[1];
+	(synth !== nil).if({(key ++ ":  ").post;
+		SynthDescLib.global.at(synth.defName).controlNames.postln})}
 )
 
 
-a = Synth(\default);
+
+// GET All Effect Controls AND Values:
+
+(
+~addrBook.me.effectBank.dict.keysValuesDo{
+	|key, value|
+	var synth = value[1];
+	(synth !== nil).if({
+		SynthDescLib.global.at(synth.defName).controlNames.do{
+			|control|
+			synth.get(control, {|value|
+				(key ++ ":  ").post;
+				(control++": "++value).postln})}})}
+)
+
+// GET ONE Effect Controls AND Values:
+
+(
+~effectLookup = {|name|
+	var synth = ~addrBook.me.effectBank.dict[name][1];
+	(synth !== nil).if({
+		//(name ++ ":  ").post;
+		SynthDescLib.global.at(synth.defName).controlNames.do{
+			|control|
+			synth.get(control, {|value|
+				(control++": "++value).postln})}})}
+)
+
+// then:
+
+~effectLookup.value(\reverb);
 
 
-x = f.(a)
 
--> ( 'out': 0, 'gate': 1, 'freq': 440, 'amp': 0.10000000149012,
-   'pan': 0 )
+// Collect One Effect Controls AND Values into dict:
 
+(
+~effectLookupDict = {|name|
+	var synth = ~addrBook.me.effectBank.dict[name][1];
+	var dict = Dictionary.new;
+	dict.postln;
+	(synth !== nil).if({
+		SynthDescLib.global.at(synth.defName).controlNames.do{
+			|control|
+			synth.get(control, {|value|
+				dict.add(control -> value)})}});
+	dict.postln;
 
-a.set(\freq, 300);
+})
 
-y = g.(a)
+// then:
 
--> ()
+a= ~effectLookupDict.value(\reverb);
+a.postln;
 
-// empty as asynchronous, eval y, got it meanwhile
+// SET Effect Control Value:
 
-y
+~addrBook.me.effectBank.dict[\reverb][1].set(\mix, 0.5);
+a= ~effectLookupDict.value(\reverb);
+a.postln;
 
--> ( 'out': 0, 'gate': 1, 'freq': 300, 'amp': 0.10000000149012,
-   'pan': 0 )
-
-
-a.release;
-
-
+~addrBook.me.effectBank.dict[\reverb][1].set(\mix, 0.75);
+a= ~effectLookupDict.value(\reverb);
+a.postln;
 

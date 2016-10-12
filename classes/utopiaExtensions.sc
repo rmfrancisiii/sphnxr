@@ -25,9 +25,9 @@
 
 	effectsList { ^this.effectList.names}
 
-
-	// effectSet {|key, control, value|
-	// this.effectList.effectSet(key, control, value)}
+	/*setEffect {|key, control, value|
+		this.effectBank.effectSet(key, control, value)
+	}*/
 
 	//NOT done
 	// effectGet {|key, control, value|
@@ -42,7 +42,10 @@
 
 	testAllAudio {
 		"Testing peers audio:".postln;
-		this.peers.do({arg item, i; this.send(item.name, "/testAudio", 50+(2*i), 60+(3*i) )});
+		this.peers.do({arg item, i;
+			this.send(item.name, "/testAudio",
+				50+(2*i),
+				60+(3*i) )});
     }
 
 	testMsg{|peer|

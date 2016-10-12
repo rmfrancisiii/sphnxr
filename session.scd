@@ -25,14 +25,23 @@
 	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
 	item.postln });
 
-)
+~effects=~addrBook.me.effectBank.dict;
 
-(
+~effects.keys.postln;
 
 // add a couple of effects.
 
+~rose.addEffect(\reverb, \freeverb);
+~rose.addEffect(\distortion, \dist);
+~rose.effectsList;
+
+)
+
+(
+// add a couple of effects REMOTE.
+
+
 ~river.addEffect(\reverb, \freeverb);
-~river.addEffect(\reverb2, \freeverb);
 ~river.addEffect(\distortion, \dist);
 ~river.effectsList;
 
@@ -98,11 +107,11 @@
 (
 // 3. now set the individual pdefns
 
-Pdefn(\sinsawTarget, \river, inf);
+Pdefn(\sinsawTarget, \rose, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
 Pdefn(\sinsawOutBus, \masterOut, inf);
 
-Pdefn(\sinsaw2Target, \river, inf);
+Pdefn(\sinsaw2Target, \rose, inf);
 Pdefn(\sinsaw2Instrument, \saw, inf);
 Pdefn(\sinsaw2OutBus, \masterOut, inf);
 
@@ -114,7 +123,7 @@ Pdefn(\sinsawAtt, 0.75, inf);
 Pdefn(\sinsawWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 
 
-Pdefn(\ixiTarget, \river, inf);
+Pdefn(\ixiTarget, \rose, inf);
 Pdefn(\ixiInstrument, \ixibass, inf);
 Pdefn(\ixiOutBus, \masterOut, inf);
 Pdefn(\ixiFreq, Pshuf(([50,52,54,55,58,60]-5).midicps, inf));
@@ -129,20 +138,22 @@ Pdefn(\ixiWait, Pseq([ 0.125, 0.25, 0.5, 0.25, 0.25, 0.5, 0.25, 1.0], inf));
 // 4. start the pstreams
 (
 ~sinsaw.play;
-~sinsaw2.play;
-~ixibass.play;
 )
 
 
 Pdefn(\sinsawInstrument, \saw, inf);
-Pdefn(\sinsaw2Instrument, \sin, inf);
+Pdefn(\sinsawInstrument, \sin, inf);
 
 Pdefn(\sinsawOutBus, \distortion, inf);
-Pdefn(\sinsaw2OutBus, \reverb, inf);
+Pdefn(\sinsawOutBus, \reverb, inf);
+Pdefn(\sinsawOutBus, \masterOut, inf);
 
 
+~sinsaw2.play;
+~ixibass.play;
 
-Pdefn(\ixiOutBus, \reverb, inf);
+
+Pdefn(\ixiOutBus, \distortion, inf);
 Pdefn(\sinsaw2OutBus, \masterOut, inf);
 Pdefn(\sinsawOutBus, \masterOut, inf);
 
@@ -155,11 +166,6 @@ Pdefn(\ixiOutBus, \masterOut, inf);
 //Pdefn(\ixiTarget, \river, inf);
 
 // 5. change the p midstream:
-
-
-Pdefn(\sinsawOutBus, 0, inf);
-Pdefn(\sinsaw2OutBus, ~effectList.busIndex(\reverb), inf);
-
 // *** should be Peer.setEffect
 //~effectList.set(\reverb, \mix, 0.9);
 //~effectList.set(\reverb, \room, 0.99);
@@ -187,13 +193,3 @@ Pdefn(\sinsaw2Instrument, \sin, inf);
 ~ixibass.stop;
 )
 
-// *** LIES: actually i don't think this works any more
-// we need a new method for freeing all busses and synths
-// 7. free the effects synths and remove from the list
-// *** should be peer.freeEffect
-// *** Is this freeing the bus too? or just the synth?
-
-// (
-// ~effectList.free(\reverb);
-// ~effectList.free(\distortion);
-// )
