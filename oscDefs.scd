@@ -56,22 +56,15 @@ OSCdef.newMatching(\updateEffectListOSC,
 		var name =(~addrBook.findname(addr));
 		var newMsg = Dictionary.newFrom(msg.drop(1));
 		~addrBook.at(name).effectList.dict=newMsg;
-		~addrBook.at(name).effectList.dict=newMsg;
-		~addrBook.at(name).effectList.dict=newMsg;
 }, "/updateEffectListOSC");
 
 
 
-
-
-
-
-// Update
 // request to set effect bus
-// OSCdef.newMatching(\effectSet,
-// 	{|msg, time, addr, recvPort |
-// 		~addrBook.me.effectSet(msg[1].asSymbol, msg[2], msg[3]);
-// }, "/effectSet"); // path matching
+OSCdef.newMatching(\setEffectOSC,
+	{|msg, time, addr, recvPort |
+		~addrBook.me.effectBank.setEffect(msg[1].asSymbol, msg[2], msg[3]);
+}, "/setEffectOSC"); // path matching
 
 // Request
 // //request to GET effect bus control values

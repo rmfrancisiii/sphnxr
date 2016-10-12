@@ -25,9 +25,8 @@
 
 	effectsList { ^this.effectList.names}
 
-	/*setEffect {|key, control, value|
-		this.effectBank.effectSet(key, control, value)
-	}*/
+	setEffect {|key, control, value|
+		this.sendMsg("/setEffectOSC", key, control, value)}
 
 	//NOT done
 	// effectGet {|key, control, value|

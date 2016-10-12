@@ -42,13 +42,10 @@ EffectBank {
 		^reply;
 	}
 
-	//
-	//
-	//
-	// effectSet {|key, control, value|
-	// 	this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
-	// 	this.dict[key.asSymbol].at(1).set(control.asSymbol, value);
-	// }
+	setEffect {|key, control, value|
+		this.dict.atFail(key.asSymbol, {"effect not found".postln; ^nil});
+		this.dict[key.asSymbol].at(1).set(control.asSymbol, value);
+	}
 	//
 	// // get effect control values
 	// effectGet { |key|

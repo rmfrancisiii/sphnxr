@@ -139,13 +139,18 @@ Pdefn(\ixiWait, Pseq([ 0.125, 0.25, 0.5, 0.25, 0.25, 0.5, 0.25, 1.0], inf));
 (
 ~sinsaw.play;
 )
+Pdefn(\sinsawOutBus, \reverb, inf);
+~rose.setEffect(\reverb, \room, 0.99);
+~rose.setEffect(\reverb, \mix, 0.99);
+~rose.setEffect(\reverb, \damp, 0.99);
+
+~sinsaw.stop;
 
 
 Pdefn(\sinsawInstrument, \saw, inf);
 Pdefn(\sinsawInstrument, \sin, inf);
 
 Pdefn(\sinsawOutBus, \distortion, inf);
-Pdefn(\sinsawOutBus, \reverb, inf);
 Pdefn(\sinsawOutBus, \masterOut, inf);
 
 
@@ -167,10 +172,7 @@ Pdefn(\ixiOutBus, \masterOut, inf);
 
 // 5. change the p midstream:
 // *** should be Peer.setEffect
-//~effectList.set(\reverb, \mix, 0.9);
-//~effectList.set(\reverb, \room, 0.99);
-//~effectList.set(\reverb, \damp, 0.01);
-//~effectList.set(\reverb, \mix, 0.99);
+
 
 Pdefn(\sinsaw2Instrument, \sin, inf);
 Pdefn(\sinsaw2Instrument, \saw, inf);

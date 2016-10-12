@@ -55,8 +55,12 @@ SynthDescLib.global.at(~addrBook.me.effectBank.dict[\reverb][1].defName);
 
 // then:
 
+~effectLookup.value(\distortion);
 ~effectLookup.value(\reverb);
 
+~rose.setEffect(\reverb, \room, 0.99);
+~rose.setEffect(\reverb, \mix, 0.99);
+~rose.setEffect(\reverb, \damp, 0.99);
 
 
 // Collect One Effect Controls AND Values into dict:
