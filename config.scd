@@ -3,6 +3,7 @@ Server.default = s = Server.local;
 // set server options here
 s.options.maxNodes_(4096);
 s.options.memSize_(32768);
+s.latency = 0.05;
 //s.options.device="JackRouter";
 //s.options.outDevice = "JackRouter";
 //s.options.inDevice = "JackRouter";

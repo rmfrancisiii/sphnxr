@@ -14,3 +14,10 @@
 "creating address book".postln;
 ~addrBook.addMe(~hostname); // add this machine
 ~hail = Hail(~addrBook);
+~me=~addrBook.me;
+
+// This should create an env variable named for each peer in the AddrBook
+~addrBook.names.do({ arg item, i;
+	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
+	item.postln });
+

@@ -57,16 +57,22 @@ s.waitForBoot({
 
 	// Effects
 	"Loading Effects".postln;
-	~effects = (~pwd +/+ "/effects/*").pathMatch.collect {
+	~effectFiles = (~pwd +/+ "/effects/*").pathMatch.collect {
 		|file|
 			file.loadPaths;
 		(file +/+ " loaded").postln };
 	("Effects initialized: Success " + ~delim).postln;
 
 
-		// Test Peers
-	"Testing Utopia Peers:".postln;
+	// starting clock
+	~clock = BeaconClock(~addrBook).permanent_(true);
+	// this use a default name (osc path) for this clock,
+	// so it will be the same clock for each participant
 
+
+	// set as default clock to not have to write ~clock for each pattern
+
+	TempoClock.default = ~clock;
 
 
 
