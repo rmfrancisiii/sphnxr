@@ -17,12 +17,19 @@
 // 4.  Generic testing
 ("~/git/sphnxr/tests.scd").loadPaths;
 
-
+// This should create an env variable named for each peer in the AddrBook
+(~addrBook.names.do({ arg item, i;
+	currentEnvironment.put(item.asSymbol, ~addrBook.at(item.asSymbol));
+	item.postln });
+)
 (
 // 5.  Add a couple of effects.
 ~rose.addEffect(\reverb, \freeverb);
 ~rose.addEffect(\distortion, \dist);
 )
+
+
+~addrBook.broadcastEffectList;
 
 (
 // 6.  Now set the individual pdefns
