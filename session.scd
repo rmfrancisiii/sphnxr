@@ -39,14 +39,31 @@ Pdefn(\sinOutBus, \masterOut, inf);
 Pdefn(\sinFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
 Pdefn(\sinDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinAmp, 0.25, inf);
-Pdefn(\sinAtt, 0.75, inf);
+Pdefn(\sinAtt, 0.015, inf);
 Pdefn(\sinWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
+Pdefn(\sinWait, Pseq([0.5], inf));
+Pdefn(\sinFreq, Pseq(([50,52,54,55]).midicps, inf));
+Pdefn(\sinDuration, Pseq([0.25], inf));
 )
 
 
 // 7.  Start the synth
 ~sin.play;
 
+
+(
+// 6.  Now set the individual pdefns
+Pdefn(\ixiTarget, \rose, inf);
+Pdefn(\ixiInstrument, \ixibass, inf);
+Pdefn(\ixiOutBus, \masterOut, inf);
+Pdefn(\ixiFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
+Pdefn(\ixiDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
+Pdefn(\ixiAmp, 0.25, inf);
+Pdefn(\ixiTrig, 0.75, inf);
+Pdefn(\ixiRQ, 0.75, inf);
+Pdefn(\ixiWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
+)
+~ixibass.play;
 
 // 8.  Change the outbus
 Pdefn(\sinOutBus, \reverb, inf);

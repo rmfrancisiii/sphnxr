@@ -19,7 +19,7 @@
 		\mod1, Pdefn(\sinMod1),
 		\mod2, Pdefn(\sinMod2)
 	), Pdefn(\sinWait),
-	~addrBook);
+	~addrBook, ~clock, 1);
 
 ~saw = PStream(
 	Pbind(
@@ -33,7 +33,7 @@
 		\pan, Pdefn(\sawPan),
 		\att, Pdefn(\sawAtt)
 	), Pdefn(\sawWait),
-	~addrBook);
+	~addrBook, ~clock, 1);
 
 
 ~ixibass = PStream(
@@ -47,7 +47,7 @@
 		\freq, Pdefn(\ixiFreq),
 		\rq, Pdefn(\ixiRQ)
 	), Pdefn(\ixiWait),
-	~addrBook);
+	~addrBook, ~clock, 1);
 
 ~granular = PStream(
 	Pbind(
@@ -70,7 +70,7 @@
 		\amp, Pdefn(\granAmp),
 		\noteDur, Pdefn(\granNoteDuration)
 	), Pdefn(\granWait),
-	~addrBook);
+	~addrBook, ~clock, 1);
 
 
 ~sinsaw = PStream(
