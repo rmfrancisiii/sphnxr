@@ -27,7 +27,8 @@
 ~rose.addEffect(\reverb, \freeverb);
 ~rose.addEffect(\distortion, \dist);
 )
-
+~river.effectsList;
+~rose.effectsList;
 
 ~addrBook.broadcastEffectList;
 
@@ -36,13 +37,10 @@
 Pdefn(\sinTarget, \rose, inf);
 Pdefn(\sinInstrument, \sin, inf);
 Pdefn(\sinOutBus, \masterOut, inf);
-Pdefn(\sinFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
-Pdefn(\sinDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\sinAmp, 0.25, inf);
+Pdefn(\sinFreq, Pshuf(([48,50,52,53,55,57,58]).midicps, inf));
+Pdefn(\sinAmp, 0.5, inf);
 Pdefn(\sinAtt, 0.015, inf);
-Pdefn(\sinWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
 Pdefn(\sinWait, Pseq([0.5], inf));
-Pdefn(\sinFreq, Pseq(([50,52,54,55]).midicps, inf));
 Pdefn(\sinDuration, Pseq([0.25], inf));
 )
 
@@ -51,37 +49,49 @@ Pdefn(\sinDuration, Pseq([0.25], inf));
 ~sin.play;
 
 
+
 (
 // 6.  Now set the individual pdefns
 Pdefn(\ixiTarget, \rose, inf);
 Pdefn(\ixiInstrument, \ixibass, inf);
 Pdefn(\ixiOutBus, \masterOut, inf);
-Pdefn(\ixiFreq, Pshuf(([50,52,54,55,58,60]+5).midicps, inf));
-Pdefn(\ixiDuration, Pshuf([0.5, 0.25, 0.5, 0.25], inf));
-Pdefn(\ixiAmp, 0.25, inf);
-Pdefn(\ixiTrig, 0.75, inf);
-Pdefn(\ixiRQ, 0.75, inf);
-Pdefn(\ixiWait, Pshuf([0.125, 0.25, 0.25, 0.5, 0.25], inf));
+Pdefn(\ixiFreq, Pshuf(([48,50,52,53,55,57,58]).midicps, inf));
+Pdefn(\ixiAmp, 0.05, inf);
+Pdefn(\ixiTrig, 1, inf);
+Pdefn(\ixiRQ, 0.004, inf);
+Pdefn(\ixiWait, Pseq([0.5], inf));
 )
 ~ixibass.play;
 
 // 8.  Change the outbus
-Pdefn(\sinOutBus, \reverb, inf);
+Pdefn(\ixiOutBus, \reverb, inf);
+Pdefn(\sinOutBus, \distortion, inf);
 
 
 // 9. Change effect parameters
-~rose.setEffect(\reverb, \room, 0.99);
-~rose.setEffect(\reverb, \mix, 0.99);
-~rose.setEffect(\reverb, \damp, 0.99);
+~rose.setEffect(\reverb, \room, 0.5);
+~rose.setEffect(\reverb, \mix, 0.5);
+~rose.setEffect(\reverb, \damp, 0.5);
+
+
+~sin.stop;
+Pdefn(\sinWait, Pseq([0.25], inf));
+
+Pdefn(\sinWait, Pseq([0.125, 0.5, 0.125, 0.25], inf));
+Pdefn(\sinDuration, Pshuf([0.125, 0.25, 0.5, 0.125], inf));
+Pdefn(\ixiWait, Pseq([0.125, 0.25, 0.5, 0.125], inf));
+
+Pdefn(\sinWait, Pseq([0.125], inf));
 
 
 // 10.  Change the outbus
 Pdefn(\sinOutBus, \distortion, inf);
 
 // 11.  Change the outbus
-~rose.setEffect(\distortion, \postGain, 0.12);
-~rose.setEffect(\distortion, \preGain, 50.0);
+~rose.setEffect(\distortion, \postGain, 0.05);
+~rose.setEffect(\distortion, \preGain, 20.0);
 
 
 // 12.  Stop the pstream
 ~sin.stop;
+~ixibass.stop;
