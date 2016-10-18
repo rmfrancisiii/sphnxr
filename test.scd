@@ -1,3 +1,4 @@
+@@ -1,10 +1,22 @@
 "loading config.scd...".postln;
 Server.default = s = Server.local;
 // thisThread.randSeed_(120);
@@ -19,4 +20,4 @@ s.options.inDevice = "JackRouter";
 
 ~hostname = ("hostname".unixCmdGetStdOut.split($.)[0]).asSymbol;
 ("hostname: " +/+ ~hostname).postln;
-"loaded".postln;
+"loaded".postln; 
