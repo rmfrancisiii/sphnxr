@@ -71,18 +71,8 @@ s.waitForBoot({
 
 
 	// set as default clock to not have to write ~clock for each pattern
-
 	TempoClock.default = ~clock;
-
-
 
 	"Ready to Collide >>".postln;
 
 });
-
-	// synthdefs
-	//granular
-	//fm
-	//sinsynth
-	//polysynth
-	//vocoder

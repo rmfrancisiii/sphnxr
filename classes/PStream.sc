@@ -20,6 +20,11 @@ PStream {
 
     stop { routine.stop;}
 
+	step{
+		var bindStream = bind.asStream;
+		this.send(bindStream.next(()));
+	}
+
     play{
 		var bindStream = bind.asStream;
 		var intervalStream = interval.asStream;

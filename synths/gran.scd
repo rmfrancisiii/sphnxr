@@ -8,7 +8,7 @@ SynthDef(\gran, {|
 	granDurMax=0.1,
 	playRateMin=0.5,
 	playRateMax=2,
-	envBuf=(-1.0),
+	envBuf=(-1),
 	envLevels = #[0,1,0],
 	envTimes = #[1,1],
 	pan=0,

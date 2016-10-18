@@ -19,7 +19,7 @@
 		\mod1, Pdefn(\sinMod1),
 		\mod2, Pdefn(\sinMod2)
 	), Pdefn(\sinWait),
-	~addrBook, ~clock, 1);
+	~addrBook, ~clock, 0.5);
 
 ~saw = PStream(
 	Pbind(
@@ -33,7 +33,7 @@
 		\pan, Pdefn(\sawPan),
 		\att, Pdefn(\sawAtt)
 	), Pdefn(\sawWait),
-	~addrBook, ~clock, 1);
+	~addrBook, ~clock, 0.5);
 
 
 ~ixibass = PStream(
@@ -53,14 +53,14 @@
 	Pbind(
 		\target, Pdefn(\granTarget, ~hostname, inf),
 		\oscpath, "/synthMsg",
-		\instrument, \gran,
+		\instrument, Pdefn(\granInstrument),
 		\outBus, Pdefn(\granOutBus),
 		\numChannels, Pdefn(\granNumChannels),
 		\bufOffset, Pdefn(\granBufOffset),
 		\bufPos, Pdefn(\granBufPos),
 		\rate, Pdefn(\granRate),
-		\grandurMin, Pdefn(\granDurMin),
-		\grandurMax, Pdefn(\granDurMax),
+		\granDurMin, Pdefn(\granDurMin),
+		\granDurMax, Pdefn(\granDurMax),
 		\playRateMin, Pdefn(\granPlayRateMin),
 		\playRateMax, Pdefn(\granPlayRateMax),
 		\envBuf, Pdefn(\granEnvBuf),

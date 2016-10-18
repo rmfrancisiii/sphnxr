@@ -94,3 +94,13 @@ a.postln;
 a= ~effectLookupDict.value(\reverb);
 a.postln;
 
+
+synths to set up:
+
+	// synthdefs
+	//granular
+	//fm
+	//sinsynth
+	//polysynth
+	//vocoder
+
