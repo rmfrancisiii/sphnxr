@@ -106,3 +106,22 @@
 	), Pdefn(\sinsawWait),
 	~addrBook);
 
+
+~fm = PStream(
+	Pbind(
+		\target, Pdefn(\fmTarget, ~hostname, inf),
+		\oscpath, "/synthMsg",
+		\instrument, Pdefn(\fmInstrument),
+		\outBus, Pdefn(\fmOutBus),
+		\freq, Pdefn(\fmFreq),
+		\carPartial, Pdefn(\fmCar),
+		\modPartial, Pdefn(\fmMod),
+		\index, Pdefn(\fmIndex),
+		\dur, Pdefn(\fmDuration),
+		\amp, Pdefn(\fmAmp),
+		\pan, Pdefn(\fmPan),
+		\att, Pdefn(\fmAtt),
+		\mod1, Pdefn(\fmMod1),
+		\mod2, Pdefn(\fmMod2)
+	), Pdefn(\fmWait),
+	~addrBook);

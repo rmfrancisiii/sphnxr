@@ -16,7 +16,7 @@ PStream {
         path = msg.removeAt(\oscpath);
         sndMsg = msg.getPairs;
         target.sendMsg(path, *sndMsg);
-		sndMsg.postln;
+		//sndMsg.postln;
     }
 
     stop { routine.stop;}
