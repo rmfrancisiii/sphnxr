@@ -32,6 +32,8 @@
 // 6.  Add a couple of effects.
 ~rose.addEffect(\reverb, \freeverb);
 ~rose.addEffect(\distortion, \dist);
+~rose.addEffect(\reslpf, \rlpf);
+
 )
 
 // note: to see available effects: ~peer.effectsList;
@@ -51,13 +53,26 @@ Pdefn(\sinTarget, \rose, inf);
 Pdefn(\sinInstrument, \sin, inf);
 Pdefn(\sinOutBus, \masterOut, inf);
 Pdefn(\sinFreq, Pshuf(([48,50,52,53,55,57,58]).midicps, inf));
-Pdefn(\sinAmp, 0.5, inf);
+Pdefn(\sinAmp, 0.25, inf);
 Pdefn(\sinAtt, 0.01, inf);
 Pdefn(\sinWait, Pseq([0.5], inf));
-Pdefn(\sinDuration, Pseq([0.25], inf));
+Pdefn(\sinDuration, Pseq([0.5], inf));
 Pdefn(\sinPan, Pseq([0], inf));
+Pdefn(\sinMod1, 0.0001, inf);
+Pdefn(\sinMod2, 0.0001, inf);
+)
+
+// 8. this is just to make sure the global tempo is set to something reasonable.
+~clock.setGlobalTempo(1);
+
+
+// 9.  Start the synth
+~sin.play;
+
+
 
 // this is a slightly more complex pattern:
+(
 Pdefn(\sinFreq,
 	Pseq([
 		Pshuf([48,50,52,53,55,57,58].midicps, 4),
@@ -68,12 +83,6 @@ Pdefn(\sinFreq,
 
 
 
-// 8. this is just to make sure the global tempo is set to something reasonable.
-~clock.setGlobalTempo(1);
-
-
-// 9.  Start the synth
-~sin.play;
 
 
 (
@@ -124,7 +133,7 @@ Pdefn(\ixiWait, Pshuf([0.125, 0.25, 0.5, 0.125], inf));
 (
 // 18.  Change the modulation of the sin synth
 Pdefn(\sinOutBus, \reverb, inf);
-Pdefn(\sinMod1, Prand([0,1,10,20,25,100,500], inf));
+Pdefn(\sinMod2, Prand([0, 0.001,0.010,0.0125,0.025,0.05,0.1, 0.5], inf));
 )
 
 
@@ -133,7 +142,7 @@ Pdefn(\sinMod1, Prand([0,1,10,20,25,100,500], inf));
 ~rose.setEffect(\reverb, \room, 0.75);
 ~rose.setEffect(\reverb, \mix, 0.5);
 ~rose.setEffect(\reverb, \damp, 0.5);
-Pdefn(\sinMod2, Pseq([0,1,10,20,25,100,500], inf));
+Pdefn(\sinMod1, Prand([0, 0.001,0.010,0.0125,0.025,0.05,0.1,0.5], inf));
 )
 
 // 20. try doubling the clock:
@@ -157,10 +166,11 @@ Pdefn(\sinMod1, Prand([0], inf));
 Pdefn(\sinMod2, Pseq([0], inf));
 )
 
+(
 // 23.  Stop the pstream
 ~sin.stop;
 ~ixibass.stop;
-
+)
 
 
 
@@ -170,11 +180,14 @@ Pdefn(\sinMod2, Pseq([0], inf));
 Pdefn(\granTarget, \rose, inf);
 Pdefn(\granInstrument, \gran, inf);
 Pdefn(\granOutBus, \reverb, inf);
-Pdefn(\granNumChannels, 1, inf);
 Pdefn(\granEnvBuf, -1, inf);
+// this is the buffer number containing a signal to use for the grain envelope. -1 uses a built-in Hann envelope
 Pdefn(\granBufOffset, Prand([0,1,2,3,4,5,6,7,8,9], inf));
-Pdefn(\granBufPos, Prand([0.1, 0.5, 0.75, 0.9], inf));
+// this is the buffer number to use. buffers are loaded during init from the granSamples folder in the repo
+Pdefn(\granBufPos, Pbrown(0, 1, 0.0125, inf));
+// this is where in the sample the grain will come from
 Pdefn(\granRate, Prand([1, 2, 5, 10, 15, 20, 25, 50, 100, 500], inf));
+Pdefn(\granRate, Pexprand(0.0001, 500, inf));
 Pdefn(\granDurMin, Prand([0.2, 0.5, 0.75, 1, 2], inf));
 Pdefn(\granDurMax, Prand([0.2, 0.5, 0.75, 1, 2], inf));
 Pdefn(\granPlayRateMin, Prand([0.1, 0.5, 0.75, 1.0, 1.25, 1.5, 2, 4, 5, 10], inf));
@@ -201,3 +214,44 @@ Pdefn(\granWait, Prand([0.5, 1.0, 1.5, 2.0, 5.0], inf));
 
 // 27. Stop the granular
 ~granular.stop;
+
+
+
+// Try Pulse
+(
+// 7.  Now set the individual pdefns for one synth
+
+Pdefn(\pulseTarget, \rose, inf);
+Pdefn(\pulseInstrument, \pulse, inf);
+Pdefn(\pulseOutBus, \reslpf, inf);
+Pdefn(\pulseFreq,
+	Pseq([
+		Pshuf([48,50,52,53,55,57,58].midicps, 4),
+		Pseq([48,52,53,55,58].midicps, 2)
+	], inf),
+	inf);
+Pdefn(\pulseAmp, 0.25, inf);
+Pdefn(\pulseAtt, 0.05, inf);
+Pdefn(\pulseWait, Pseq([0.25], inf));
+Pdefn(\pulseDuration, Pseq([0.5], inf));
+Pdefn(\pulsePan, Pseq([0], inf));
+Pdefn(\pulseMod1, 0.5, inf);
+Pdefn(\pulseMod2, 0.1, inf);
+Pdefn(\pulseInt, 0.5, inf);
+)
+
+
+
+~pulse.play;
+
+
+
+~rose.setEffect(\reslpf, \freq, 4000);
+~rose.setEffect(\reslpf, \freq, 400);
+~rose.setEffect(\reslpf, \rq, 0.0125);
+~rose.setEffect(\reslpf, \mix, 0.25);
+~rose.setEffect(\reslpf, \mix, 0.75);
+~rose.setEffect(\reslpf, \mix, 0.99);
+
+~pulse.stop;
+~pulse.step;

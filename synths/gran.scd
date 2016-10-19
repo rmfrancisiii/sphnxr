@@ -1,6 +1,5 @@
 SynthDef(\gran, {|
 	outBus=(~masterOut),
-	numChannels=1,
 	bufOffset=0,
 	bufPos=0.1,
 	rate=10.0,

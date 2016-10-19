@@ -21,6 +21,23 @@
 	), Pdefn(\sinWait),
 	~addrBook, ~clock, 0.5);
 
+~pulse = PStream(
+	Pbind(
+		\target, Pdefn(\sinTarget, ~hostname, inf),
+		\oscpath, "/synthMsg",
+		\instrument, Pdefn(\pulseInstrument),
+		\outBus, Pdefn(\pulseOutBus),
+		\freq, Pdefn(\pulseFreq),
+		\dur, Pdefn(\pulseDuration),
+		\amp, Pdefn(\pulseAmp),
+		\pan, Pdefn(\pulsePan),
+		\att, Pdefn(\pulseAtt),
+		\mod1, Pdefn(\pulseMod1),
+		\mod2, Pdefn(\pulseMod2),
+		\int, Pdefn(\pulseInt)
+	), Pdefn(\pulseWait),
+	~addrBook, ~clock, 0.5);
+
 ~saw = PStream(
 	Pbind(
 		\target, Pdefn(\sawTarget, ~hostname, inf),
